@@ -1,0 +1,6 @@
+include fleets/schema.sql
+include fleets/dictionaries.py
+include fleets/helpers.py
+graft fleets/static
+graft fleets/templates
+global-exclude *.pyc

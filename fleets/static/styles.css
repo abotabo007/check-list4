@@ -1,0 +1,53 @@
+/* Size for brand */
+nav .navbar-brand
+{
+    font-size: xx-large;
+}
+
+/* In order to place the tracking correctly */
+canvas.drawing, canvas.drawingBuffer {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+#scanner-container {
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    display: none;
+}
+video, canvas {
+    width: 100%;
+    max-width: 95vw;
+}
+
+@media screen and (max-width: 690px) {
+    #index-vehicles th:nth-child(3), #index-vehicles td:nth-child(3) {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 620px) {
+    #index-vehicles th:nth-child(2), #index-vehicles td:nth-child(2) {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 560px) {
+    #index-vehicles th:nth-child(1), #index-vehicles td:nth-child(1) {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 520px) {
+    #index-vehicles th:nth-child(5), #index-vehicles td:nth-child(5) {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 430px) {
+    #index-vehicles th:nth-child(6), #index-vehicles td:nth-child(6) {
+        display: none;
+    }
+}

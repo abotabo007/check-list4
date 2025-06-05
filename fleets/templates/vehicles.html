@@ -1,0 +1,85 @@
+{% extends "layout.html" %}
+
+{% block head %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/1.2.2/chartjs-plugin-annotation.min.js" integrity="sha512-HycvvBSFvDEVyJ0tjE2rPmymkt6XqsP/Zo96XgLRjXwn6SecQqsn+6V/7KYev66OshZZ9+f9AttCGmYqmzytiw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="/static/script.js"></script>
+{% endblock %}
+
+{% block title %}
+    List of the vehicles in your fleet
+{% endblock %}
+
+{% block main %}
+
+    <div style="text-align:center; max-width:1100px; margin: auto;">
+    {% if not vehicle %}
+        <h2>Vehicles</h2>
+        <table class="table table-hover table-sm">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Mileage of the next oil change</th>
+                    <th>Latest Inspection Mileage</th>
+                    <th>Latest Inspection Date</th>
+                    <th>Projected date of next oil change</th>
+                </tr>
+            </thead>
+            {% for v, i in vehicles.items() %}
+            <tbody>
+            {% if i[0][0] < i[0][1] %}
+                <tr style='cursor: pointer; cursor: hand; background-color:#FF0000;' onclick="window.location='/vehicles?vehicle={{ v }}';">
+            {% else %}
+                <tr style='cursor: pointer; cursor: hand;' onclick="window.location='/vehicles?vehicle={{ v }}';">
+            {% endif %}
+                    <td>{{ v }}</td>
+                    <td>{{ i[0][0] }}</td>
+                    <td>{{ i[0][1] }}</td>
+                    <td>{{ i[0][2] }}</td>
+                    <td>{{ i[0][3] }}</td>
+                </tr>
+            </tbody>
+            {% endfor %}
+        </table>
+    </div>
+{% else %}
+    <h4>View another</h4>
+    <form>
+        <div class="mb-3"></div>
+            <select id="vehicle_selection" class="form-select" name="vehicle" style="width: auto; margin-right:auto; margin-left:auto; margin-bottom:1em">
+                {% for v in vehicles %}
+                    {% if vehicle == v["number"] %}
+                        <option selected value="{{ v["number"] }}">Vehicle {{ v["number"] }}</option>
+                    {% else %}
+                        <option value="{{ v["number"] }}">Vehicle {{ v["number"] }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+    </form>
+    <div style="text-align:center; max-width:1100px; margin: auto;">
+    <h2 id="titleToChange">Vehicle {{vehicle}}: Latest issues</h2>
+        <table class="table table-hover table-sm">
+            <thead>
+                <tr>
+                    <th>By</th>
+                    <th>Date</th>
+                    <th>Item</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody id="toChange">
+            {% for i in inspection %}
+                <tr>
+                    <td>{{ i[3] }}</td>
+                    <td>{{ i[2] }}</td>
+                    <td>{{ i[1] }}</td>
+                    <td>{{ i[0] }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endif %}
+<canvas id="myChart"></canvas>
+{% endblock %}
