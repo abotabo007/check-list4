@@ -51,7 +51,11 @@
             {% endfor %}
 
         </tbody></table>
-        <input required autocomplete="off" class="form-control mx-auto w-auto" id="date" name="date" placeholder="Date" {% if i and i['date'] %} value={{ i["date"] }} {% else %} value="{{ date }}" {% endif %} type="date">
+        <!-- Campo nascosto per invio backend -->
+        <input type="hidden" name="date" value="{{ date }}">
+        <!-- Campo visibile ma non modificabile -->
+        <p><strong>Date and Time of Inspection:</strong> {{ date }}</p>
+
         <button name="vehicle" class="btn btn-primary" type="submit" value="{{ v["v_id"] }}" >Add Inspection</button>
         </form>
     {% endif %}

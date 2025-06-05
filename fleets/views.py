@@ -304,7 +304,7 @@ def inspection():
 
             # pass the info to render the inspection for that vehicle
             return render_template("inspection.html", inspection=c1, vehicle=request.args.get("vehicle"),
-                                        v=v[0], oil=oil, date=datetime.date.today().strftime('%Y-%m-%d'))
+                                        v=v[0], oil=oil, date=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
 
     # If request is post (Meaning: user sumbited an inspection)
     else:
@@ -320,11 +320,12 @@ def inspection():
         
 
         # Check that the important inputs have data, if not, render an apology
-        checks = check_inputs(request.form, ["vehicle", "miles", "maintenance", "date"], False)
+        checks = check_inputs(request.form, ["vehicle", "miles", "maintenance"], False)
         if checks[0]:
             return feedback("Must provide " + checks[1].capitalize(), "inspection.html", to_dict(request.form), "i", 400, 
                                 inspection=c1, vehicle=v[0]["number"], v=v[0], oil=request.form.get("maintenance"), 
-                                date=datetime.date.today().strftime('%Y-%m-%d'))
+                                date=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+)
 
         # Check inspection is complete
         for c in c1:
@@ -332,7 +333,7 @@ def inspection():
             if check[0]:
                 return feedback("Must provide value for: " + c[3].capitalize(), "inspection.html", to_dict(request.form), "i", 400, 
                                 inspection=c1, vehicle=v[0]["number"], v=v[0], oil=request.form.get("maintenance"),
-                                date=datetime.date.today().strftime('%Y-%m-%d'))
+                                date=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
 
         # Create the DB query dinamically depending on the data sumbited
         # query will always start the same way
@@ -344,7 +345,7 @@ def inspection():
         # vars will be an array with al the variables to insert
         vars = [session.get("c_id"), session.get("user_id"),
                 request.form.get("vehicle"), request.form.get("miles"),
-                request.form.get("maintenance"), request.form.get("date")]
+                request.form.get("maintenance"),datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')]
 
         # iterate over c1 to get whatever the user submited
         for c in c1:
@@ -374,7 +375,8 @@ def inspection():
             print(db.IntegrityError)
             return feedback('Database: Error adding inspection, contact support', "inspection.html", to_dict(request.form), "i", 400, 
                                 inspection=c1, vehicle=v[0]["number"], v=v[0], oil=request.form.get("maintenance"),
-                                date=datetime.date.today().strftime('%Y-%m-%d'))
+                                date=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+)
         else:
             # Confirm to the user and redirect to home
             
