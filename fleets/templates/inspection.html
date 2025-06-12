@@ -1,63 +1,41 @@
+<!-- inspection.html -->
 {% extends "layout.html" %}
-{% block head %}
-{% if vehicle is defined and vehicle %}
-    <script>
-        var jsVehicle = '{{ vehicle }}'
-    </script>
-{% endif %}
-<script src="./static/script.js"></script>
-
-{% endblock %}
-
-{% block title %}
-    New inspection
-{% endblock %}
-
+{% block title %}Nuova Ispezione{% endblock %}
 {% block main %}
-
-    {% if not vehicle %}
-    <h4>Vehicle to inspect</h4>
-    <form action="/inspection" method="get">
-        <div class="mb-3"></div>
-            <select class="form-select" name="vehicle" style="width: auto; margin-right:auto; margin-left:auto; margin-bottom:1em">
-                <option disabled selected>Vehicle</option>
-                {% for v in vehicles %}
-                    <option value="{{ v["number"] }}">Vehicle {{ v["number"] }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <button class="btn btn-primary" type="submit">Inspect</button>
-    </form>
-    {% else %}
-        <h4>Inspecting Vehicle {{ v["number"] }}: {{ v["year"] }} {{ v["make"] }} {{ v["model"] }}</h4>
-        <div style="text-align:center; max-width:1100px; margin: auto;">
-        <form action="/inspection" method="post">
-        <input required autocomplete="off" class="form-control mx-auto w-auto" id="miles" name="miles" {% if i and i["miles"] %} value={{ i["miles"] }} {% endif %} placeholder="Current Mileage" type="number">
-        {% if oil == None %}
-        <input required autocomplete="off" class="form-control mx-auto w-auto" id="maintenance" name="maintenance" placeholder="Next oil change" value="" type="number">
-        {% else %}
-        <input required autocomplete="off" class="form-control mx-auto w-auto" id="maintenance" name="maintenance" placeholder="Next oil change" value="{{ oil["next_oil"] }}" type="number">
-        {% endif %}
-        <table class="table table-hover table-sm"><tbody>
-
-            {% for ins in inspection %}
-                <tr>
-                    <td style="text-align:right;">{{ ins[3] }}</td>
-                    <td><input required {% if i and i[ins[0]] and i[ins[0]] == '1' %} checked="checked" {% endif %} class="form-check-input" name="{{ ins[0] }}" onchange="showHide(this)" type="radio" value=1>OK</td>
-                    <td><input required {% if i and i[ins[0]] and i[ins[0]] == '0' %} checked="checked" {% endif %} class="form-check-input" id="{{ ins[0] }}" name="{{ ins[0] }}" onchange="showHide(this)" type="radio" value=0>Not ok</td>
-                    <td><input required {% if i and i[ins[0]] and i[ins[0]] == '2' %} checked="checked" {% endif %} class="form-check-input" name="{{ ins[0] }}" onchange="showHide(this)" type="radio" value=2>N/A</td>
-                    <td><input {% if i and i[ins[1]] %} value={{ i[ins[1]] }} {% endif %} id="{{ ins[1] }}" name="{{ ins[1] }}" type="text" style="visibility:hidden"></td>
-                </tr>
+{% if not vehicle %}
+<h4>Seleziona un veicolo da ispezionare</h4>
+<form action="/inspection" method="get">
+    <div class="mb-3">
+        <select class="form-select mx-auto" name="vehicle" style="width: auto; margin-bottom:1em">
+            <option disabled selected>Veicolo</option>
+            {% for v in vehicles %}
+                <option value="{{ v["number"] }}">Veicolo {{ v["number"] }}</option>
             {% endfor %}
-
-        </tbody></table>
-        <!-- Campo nascosto per invio backend -->
-        <input type="hidden" name="date" value="{{ date }}">
-        <!-- Campo visibile ma non modificabile -->
-        <p><strong>Date and Time of Inspection:</strong> {{ date }}</p>
-
-        <button name="vehicle" class="btn btn-primary" type="submit" value="{{ v["v_id"] }}" >Add Inspection</button>
-        </form>
-    {% endif %}
+        </select>
     </div>
+    <button class="btn btn-danger" type="submit">Ispeziona</button>
+</form>
+{% else %}
+<h4>Ispezione veicolo {{ v["number"] }}: {{ v["year"] }} {{ v["make"] }} {{ v["model"] }}</h4>
+<div style="text-align:center; max-width:1100px; margin: auto;">
+<form action="/inspection" method="post">
+    <input required autocomplete="off" class="form-control mx-auto w-auto" id="miles" name="miles" placeholder="Chilometraggio attuale" type="number">
+    <input required autocomplete="off" class="form-control mx-auto w-auto" id="maintenance" name="maintenance" placeholder="Prossimo cambio olio" type="number">
+    <table class="table table-hover table-sm"><tbody>
+        {% for ins in inspection %}
+        <tr>
+            <td style="text-align:right;">{{ ins[3] }}</td>
+            <td><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</td>
+            <td><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</td>
+            <td><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=2> N/D</td>
+            <td><input class="form-control" name="{{ ins[1] }}" type="text" style="visibility:hidden"></td>
+        </tr>
+        {% endfor %}
+    </tbody></table>
+    <input type="hidden" name="date" value="{{ date }}">
+    <p><strong>Data e ora dell'ispezione:</strong> {{ date }}</p>
+    <button name="vehicle" class="btn btn-danger" type="submit" value="{{ v["v_id"] }}">Aggiungi Ispezione</button>
+</form>
+{% endif %}
+</div>
 {% endblock %}

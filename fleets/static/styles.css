@@ -1,53 +1,62 @@
-/* Size for brand */
-nav .navbar-brand
-{
-    font-size: xx-large;
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
 }
 
-/* In order to place the tracking correctly */
-canvas.drawing, canvas.drawingBuffer {
-    position: absolute;
-    left: 0;
-    top: 0;
+h2, h4 {
+    color: #b71c1c;
+    font-weight: bold;
 }
 
-#scanner-container {
-    position: relative;
-    margin-left: auto;
-    margin-right: auto;
-    display: none;
-}
-video, canvas {
-    width: 100%;
-    max-width: 95vw;
+input.form-control,
+select.form-select {
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
-@media screen and (max-width: 690px) {
-    #index-vehicles th:nth-child(3), #index-vehicles td:nth-child(3) {
-        display: none;
-    }
+button.btn {
+    padding: 0.6rem 1.2rem;
+    border-radius: 0.5rem;
+    font-weight: bold;
+    background-color: #d32f2f;
+    border: none;
+    transition: background-color 0.3s;
 }
 
-@media screen and (max-width: 620px) {
-    #index-vehicles th:nth-child(2), #index-vehicles td:nth-child(2) {
-        display: none;
-    }
+button.btn:hover {
+    background-color: #b71c1c;
 }
 
-@media screen and (max-width: 560px) {
-    #index-vehicles th:nth-child(1), #index-vehicles td:nth-child(1) {
-        display: none;
-    }
+.table {
+    border-radius: 0.5rem;
+    overflow: hidden;
+    background-color: #fff;
 }
 
-@media screen and (max-width: 520px) {
-    #index-vehicles th:nth-child(5), #index-vehicles td:nth-child(5) {
-        display: none;
-    }
+.table th {
+    background-color: #f1f1f1;
+    color: #d32f2f;
 }
 
-@media screen and (max-width: 430px) {
-    #index-vehicles th:nth-child(6), #index-vehicles td:nth-child(6) {
-        display: none;
-    }
+.table td, .table th {
+    padding: 0.75rem;
+    vertical-align: middle;
+}
+
+.navbar {
+    background-color: #d32f2f !important;
+}
+
+.navbar-brand {
+    color: #fff !important;
+    font-weight: bold;
+}
+
+a, a:hover {
+    color: #d32f2f;
+    text-decoration: none;
 }

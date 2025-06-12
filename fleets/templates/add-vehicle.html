@@ -1,40 +1,32 @@
+<!-- add-vehicle.html -->
 {% extends "layout.html" %}
-
-{% block head %}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdn.rawgit.com/serratus/quaggaJS/0420d5e0/dist/quagga.min.js"></script>
-    <script src="./static/script.js"></script>
-{% endblock %}
-
-{% block title %}
-    Add vehicle
-{% endblock %}
-
+{% block title %}Aggiungi Veicolo{% endblock %}
 {% block main %}
-    <h4>Add a vehicle</h4>
-    <form action="/add-vehicle" method="post">
-        <div class="mb-3">
-            <input required autocomplete="off" autofocus class="form-control mx-auto w-auto" id="year" name="year" {% if v and v["year"] %} value={{ v["year"] }} {% endif %} placeholder="Year" type="number">
-        </div>
-        <div class="mb-3">
-            <input required autocomplete="off" autofocus class="form-control mx-auto w-auto" id="make" name="make" {% if v and v["make"] %} value={{ v["make"] }} {% endif %} placeholder="Make" type="text">
-        </div>
-        <div class="mb-3">
-            <input required autocomplete="off" autofocus class="form-control mx-auto w-auto" id="model" {% if v and v["model"] %} value={{ v["model"] }} {% endif %} name="model" placeholder="Model" type="text">
-        </div>
-        <div class="mb-3">
-            <input required autocomplete="off" autofocus class="form-control mx-auto w-auto" id="number" {% if v and v["number"] %} value={{ v["number"] }} {% endif %} name="number" placeholder="Vehicle ID" type="text">
-        </div>
-        <div class="mb-3">
-            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="tag" {% if v and v["tag"] %} value={{ v["tag"] }} {% endif %} name="tag" placeholder="Vehicle tag" type="text">
-        </div>
-        <div class="mb-3">
-            <input required autocomplete="off" autofocus class="form-control mx-auto w-auto" id="vin" {% if v and v["vin"] %} value={{ v["vin"] }} {% endif %} name="vin" placeholder="VIN" type="text">
-        </div>
-        <button class="btn btn-primary" type="submit">Add</button>
-        <input class="btn btn-primary" type="button" id="btn" value="Start/Stop the scanner" />
-        <hr>
-        <div id="scanner-container"></div>
-
-    </form>
+<div class="text-center my-4">
+  <h2 style="color: #d32f2f;"><i class="fas fa-truck"></i> Aggiungi un veicolo</h2>
+</div>
+<form action="/add-vehicle" method="post" style="max-width: 600px; margin: auto;">
+  <div class="mb-3">
+    <input required autocomplete="off" class="form-control" id="year" name="year" placeholder="Anno" type="number">
+  </div>
+  <div class="mb-3">
+    <input required autocomplete="off" class="form-control" id="make" name="make" placeholder="Marca" type="text">
+  </div>
+  <div class="mb-3">
+    <input required autocomplete="off" class="form-control" id="model" name="model" placeholder="Modello" type="text">
+  </div>
+  <div class="mb-3">
+    <input required autocomplete="off" class="form-control" id="number" name="number" placeholder="ID veicolo" type="text">
+  </div>
+  <div class="mb-3">
+    <input autocomplete="off" class="form-control" id="tag" name="tag" placeholder="Targa" type="text">
+  </div>
+  <div class="mb-3">
+    <input required autocomplete="off" class="form-control" id="vin" name="vin" placeholder="VIN" type="text">
+  </div>
+  <button class="btn text-white" type="submit" style="background-color: #d32f2f;">Aggiungi</button>
+  <input class="btn btn-outline-secondary ms-2" type="button" id="btn" value="Avvia/ferma scanner">
+  <hr>
+  <div id="scanner-container"></div>
+</form>
 {% endblock %}
