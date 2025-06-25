@@ -6,7 +6,8 @@ CREATE TABLE IF NOT EXISTS companys
 CREATE TABLE IF NOT EXISTS users
                (u_id INTEGER PRIMARY KEY, c_id INTEGER NOT NULL,
                username TEXT NOT NULL, email TEXT NOT NULL,
-               hash TEXT NOT NULL, role TEXT NOT NULL, FOREIGN KEY (c_id)
+               hash TEXT NOT NULL, role TEXT NOT NULL,
+FOREIGN KEY (c_id)
                REFERENCES companys (id) ON DELETE CASCADE ON UPDATE NO ACTION);
 CREATE TABLE IF NOT EXISTS vehicles
                (v_id INTEGER PRIMARY KEY, c_id INTEGER NOT NULL,
@@ -47,8 +48,8 @@ CREATE TABLE IF NOT EXISTS inspections
                 garze_non_sterili_10x10 INTEGER, garze_non_sterili_10x10_t TEXT, garze_non_sterili_10x10_b BLOB,
                 garze_non_sterili_30x30 INTEGER, garze_non_sterili_30x30_t TEXT, garze_non_sterili_30x30_b BLOB,
                 garze_sterili INTEGER, garze_sterili_t TEXT, garze_sterili_b BLOB,
-                rasoio INTEGER, rasoio_t TEXT, rasoio_b BLOB
-                laccio_emostatico_lea INTEGER, laccio_emostatico_lea_t TEXT, laccio_emostatico_lea_b BLOB,
+                rasoio INTEGER, rasoio_t TEXT, rasoio_b BLOB,
+                laccio_emostatico INTEGER, laccio_emostatico_t TEXT, laccio_emostatico_b BLOB,
                 tellino_sterile INTEGER, tellino_sterile_t TEXT, tellino_sterile_b BLOB,
                 nastrotela INTEGER, nastrotela_t TEXT, nastrotela_b BLOB,
                 cerotti_medicati_scatola INTEGER, cerotti_medicati_scatola_t TEXT, cerotti_medicati_scatola_b BLOB,

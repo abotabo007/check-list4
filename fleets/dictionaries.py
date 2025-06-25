@@ -125,7 +125,7 @@ c1 = [
     ["garze_non_sterili_30x30", "garze_non_sterili_30x30_t", "garze_non_sterili_30x30_b", "Garze non sterili 30x30"],
     ["garze_sterili", "garze_sterili_t", "garze_sterili_b", "Garze sterili"],
     ["rasoio", "rasoio_t", "rasoio_b", "Rasoio"],
-    ["laccio_emostatico_lea", "laccio_emostatico_lea_t", "laccio_emostatico_lea_b", "Laccio emostatico (LEA)"],
+    ["laccio_emostatico", "laccio_emostatico_t", "laccio_emostatico_b", "Laccio emostatico"],
     ["tellino_sterile", "tellino_sterile_t", "tellino_sterile_b", "Tellino sterile"],
     ["nastrotela", "nastrotela_t", "nastrotela_b", "Nastrotela"],
     ["cerotti_medicati_scatola", "cerotti_medicati_scatola_t", "cerotti_medicati_scatola_b", "Cerotti medicati in scatola"],
@@ -274,5 +274,5 @@ c1 = [
     ["set_scasso", "set_scasso_t", "set_scasso_b", "Set scasso"],
     ["badile", "badile_t", "badile_b", "Badile"],
     ["catene_da_neve", "catene_da_neve_t", "catene_da_neve_b", "Catene da neve (su 210 in cabina)"],
-    ["bombolino_o2_di_scorta", "bombolino_o2_di_scorta_t", "bombolino_o2_di_scorta_b", "Bombolino O2 da 3 L. di scorta"]
+    ["bombolino_o2_di_scorta", "bombolino_o2_di_scorta_t", "bombolino_o2_di_scorta_b", "Bombolino O2 da 3 L. di scorta"],
 ]
