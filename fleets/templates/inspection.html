@@ -21,6 +21,8 @@
 <form action="/inspection" method="post">
     <input required autocomplete="off" class="form-control mx-auto w-auto" id="miles" name="miles" placeholder="Chilometraggio attuale" type="number">
     <input required autocomplete="off" class="form-control mx-auto w-auto" id="maintenance" name="maintenance" placeholder="Prossimo cambio olio" type="number">
+    <input required autocomplete="off" class="form-control mx-auto w-auto" id="first_name" name="first_name" placeholder="First Name" type="text">
+    <input required autocomplete="off" class="form-control mx-auto w-auto" id="last_name" name="last_name" placeholder="Last Name" type="text">
     <table class="table table-hover table-sm"><tbody>
         {% for ins in inspection %}
         <tr>

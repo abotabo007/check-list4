@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% block title %}All Completed Inspections{% endblock %}
+
+{% block main %}
+<h2>All Completed Inspections</h2>
+
+<div class="accordion" id="inspectionsAccordion">
+  {% for ins in inspections %}
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="heading{{ loop.index }}">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ loop.index }}" aria-expanded="false" aria-controls="collapse{{ loop.index }}">
+        {{ ins.date }} | {{ ins.first_name }} {{ ins.last_name }} | Vehicle: {{ ins.v_id }}
+      </button>
+    </h2>
+    <div id="collapse{{ loop.index }}" class="accordion-collapse collapse" aria-labelledby="heading{{ loop.index }}" data-bs-parent="#inspectionsAccordion">
+      <div class="accordion-body">
+        <strong>Inspector:</strong> {{ ins.first_name }} {{ ins.last_name }}<br>
+        <strong>Username:</strong> {{ ins.username }}<br>
+        <strong>Date & Time:</strong> {{ ins.date }}<br>
+        <strong>Vehicle ID:</strong> {{ ins.v_id }}<br>
+        <strong>Mileage:</strong> {{ ins.miles }}<br>
+        <strong>Next Oil Change:</strong> {{ ins.next_oil }}<br>
+        <hr>
+        <strong>Checklist:</strong>
+        <ul>
+          {% for key, value in ins.items() %}
+            {% if key not in ['i_id', 'c_id', 'u_id', 'v_id', 'miles', 'next_oil', 'next_1', 'next_2', 'date', 'first_name', 'last_name', 'username', 'role'] and key.endswith('_t') == False and key.endswith('_b') == False %}
+              <li><strong>{{ key }}:</strong> {{ value }}</li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS inspections
                (i_id INTEGER PRIMARY KEY, c_id INTEGER NOT NULL,
                u_id INTEGER NOT NULL, v_id INTEGER NOT NULL, miles INTEGER NOT NULL,
                next_oil INTEGER NOT NULL, next_1 INTEGER, next_2 INTEGER, date TEXT NOT NULL,
+               first_name TEXT, last_name TEXT,
                leak_sign INTEGER, leak_sign_t TEXT, leak_sign_b BLOB,
                tires_inflated INTEGER, tires_inflated_t TEXT, tires_inflated_b BLOB,
                windows_clean INTEGER, windows_clean_t TEXT, windows_clean_b BLOB,

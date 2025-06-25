@@ -320,12 +320,11 @@ def inspection():
         
 
         # Check that the important inputs have data, if not, render an apology
-        checks = check_inputs(request.form, ["vehicle", "miles", "maintenance"], False)
+        checks = check_inputs(request.form, ["vehicle", "miles", "maintenance", "first_name", "last_name"], False)
         if checks[0]:
-            return feedback("Must provide " + checks[1].capitalize(), "inspection.html", to_dict(request.form), "i", 400, 
-                                inspection=c1, vehicle=v[0]["number"], v=v[0], oil=request.form.get("maintenance"), 
-                                date=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-)
+            return feedback("Must provide " + checks[1].capitalize(), "inspection.html", to_dict(request.form), "i", 400,
+                            inspection=c1, vehicle=v[0]["number"], v=v[0], oil=request.form.get("maintenance"),
+                            date=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
 
         # Check inspection is complete
         for c in c1:
@@ -337,15 +336,22 @@ def inspection():
 
         # Create the DB query dinamically depending on the data sumbited
         # query will always start the same way
-        query = "INSERT INTO inspections (c_id, u_id, v_id, miles, next_oil, date"
+        query = "INSERT INTO inspections (c_id, u_id, v_id, miles, next_oil, date, first_name, last_name"
 
         # values will be all the question marks (which should be the same number as variables to insert)
-        values = "(?, ?, ?, ?, ?, ?"
+        values = "(?, ?, ?, ?, ?, ?, ?, ?"
 
         # vars will be an array with al the variables to insert
-        vars = [session.get("c_id"), session.get("user_id"),
-                request.form.get("vehicle"), request.form.get("miles"),
-                request.form.get("maintenance"),datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')]
+        vars = [
+            session.get("c_id"),
+            session.get("user_id"),
+            request.form.get("vehicle"),
+            request.form.get("miles"),
+            request.form.get("maintenance"),
+            datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            request.form.get("first_name"),
+            request.form.get("last_name"),
+]
 
         # iterate over c1 to get whatever the user submited
         for c in c1:
@@ -786,3 +792,24 @@ def vehicles():
             graph_data.append(d)
 
         return jsonify(graph_data)
+    
+@bp.route("/all_inspections")
+@login_required
+@permissions_required  # Only admin/owner can view all checklists
+def all_inspections():
+    db = get_db()
+    inspections = as_dict(db.execute(
+        """
+        SELECT inspections.*, users.username, users.role
+        FROM inspections
+        LEFT JOIN users ON inspections.u_id = users.u_id
+        WHERE inspections.c_id = ?
+        ORDER BY inspections.date DESC
+        """,
+        [session.get("c_id")]
+    ).fetchall())
+
+    return render_template(
+        "all_inspections.html",
+        inspections=inspections
+    )
