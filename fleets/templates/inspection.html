@@ -36,7 +36,19 @@
     </tbody></table>
     <input type="hidden" name="date" value="{{ date }}">
     <p><strong>Data e ora dell'ispezione:</strong> {{ date }}</p>
+    <button type="button" class="btn btn-warning mb-3" id="check-all-btn">Check all OK (for testing)</button>
     <button name="vehicle" class="btn btn-danger" type="submit" value="{{ v["v_id"] }}">Aggiungi Ispezione</button>
+    <script>
+    document.getElementById('check-all-btn').onclick = function() {
+    const radios = document.querySelectorAll('input[type="radio"][value="1"]');
+    radios.forEach(radio => {
+        if (!radio.checked) {
+            radio.checked = true;
+            radio.dispatchEvent(new Event('change'));
+        }
+    });
+};
+    </script>
 </form>
 {% endif %}
 </div>
