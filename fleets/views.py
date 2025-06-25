@@ -452,7 +452,7 @@ def edit_vehicle():
             
             # If only one vehicle just go to edit that one, otherwise render template to select it
             if len(vehicles) == 1:
-                return redirect(url_for(".edit-vehicle") + "?vehicle=" + str(vehicles[0]["number"]))
+                return redirect(url_for(".edit_vehicle") + "?vehicle=" + str(vehicles[0]["number"]))
             else:
                 return render_template("edit-vehicle.html", vehicles=vehicles)
 
