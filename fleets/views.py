@@ -157,6 +157,7 @@ def logout():
 
 @bp.route("/add-vehicle", methods=["GET", "POST"])
 @login_required
+@permissions_required
 def add_vehicle():
     """Adds a new vehicle to the company"""
     # If request is GET render the page
