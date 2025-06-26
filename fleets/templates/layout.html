@@ -1,82 +1,38 @@
-<!-- layout.html -->
+
 <!DOCTYPE html>
 <html lang="it">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="initial-scale=1, width=device-width">
-  <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" rel="stylesheet">
-  <script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"></script>
-  {% block head %}{% endblock %}
-  <link href="/static/favicon.ico" rel="icon">
-  <link href="/static/styles.css" rel="stylesheet">
-  <title>CheckList Veicoli | {% block title %}{% endblock %}</title>
-</head>
-
-<body>
-  <nav class="navbar navbar-expand-md navbar-dark bg-danger border-bottom shadow-sm">
-    <div class="container-fluid">
-      <a class="navbar-brand fw-bold text-white" href="/">
-        <img src="/static/Fleets_logo.png" alt="Logo" width="180" class="me-2"> CheckList
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbar">
-        {% if session["user_id"] %}
-        <ul class="navbar-nav me-auto mt-2">
-          {% if session["role"] in ["owner", "admin"] %}
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle text-white" href="#" id="utentiDropdown" role="button" data-bs-toggle="dropdown">Utenti</a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="/add-user">Aggiungi Utente</a></li>
-              <li><a class="dropdown-item" href="/edit-user">Modifica Utente</a></li>
-            </ul>
-          </li>
-          {% endif %}
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle text-white" href="#" id="veicoliDropdown" role="button" data-bs-toggle="dropdown">Veicoli</a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="/vehicles">Visualizza Veicoli</a></li>
-              <li><a class="dropdown-item" href="/add-vehicle">Aggiungi Veicolo</a></li>
-              <li><a class="dropdown-item" href="/edit-vehicle">Modifica Veicolo</a></li>
-              <li><a class="dropdown-item" href="/inspection">Nuova Ispezione</a></li>
-              <li><a class="dropdown-item" href="{{ url_for('views.all_inspections') }}">All Inspections</a></li>
-            </ul>
-          </li>
-        </ul>
-        <ul class="navbar-nav ms-auto mt-2">
-          <li class="nav-item"><a class="nav-link text-white" href="/password">Cambia Password</a></li>
-          <li class="nav-item"><a class="nav-link text-white" href="/logout">Esci</a></li>
-        </ul>
-        {% else %}
-        <ul class="navbar-nav ms-auto mt-2">
-          <li class="nav-item"><a class="nav-link text-white" href="/register">Registrati</a></li>
-          <li class="nav-item"><a class="nav-link text-white" href="/login">Accedi</a></li>
-        </ul>
-        {% endif %}
+  <head>
+    <meta charset="utf-8">
+    <title>{% block title %}Fleet App{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet">
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-danger mb-4 shadow">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/">🚐 Fleet Checklist</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            {% if g.user %}
+              <li class="nav-item"><a class="nav-link" href="/inspection">Nuova Ispezione</a></li>
+              <li class="nav-item"><a class="nav-link" href="/all_inspections">Tutte le Ispezioni</a></li>
+              <li class="nav-item"><a class="nav-link" href="/vehicles">Veicoli</a></li>
+              <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+              <li class="nav-item"><a class="nav-link" href="/add_vehicle">Aggiungi Veicolo</a></li>
+            {% else %}
+              <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+              <li class="nav-item"><a class="nav-link" href="/register">Registrati</a></li>
+            {% endif %}
+          </ul>
+        </div>
       </div>
-    </div>
-  </nav>
-
-  {% if get_flashed_messages(true, ['message']) %}
-  <div class="alert alert-primary text-center mb-0">
-    {% for m in get_flashed_messages(true, ['message']) %}{{ m[1] }} {% endfor %}
-  </div>
-  {% endif %}
-  {% if get_flashed_messages(true, ['error']) %}
-  <div class="alert alert-danger text-center mb-0">
-    {% for m in get_flashed_messages(true, ['error']) %}{{ m[1] }} {% endfor %}
-  </div>
-  {% endif %}
-
-  <main class="container py-5 text-center">
-    {% block main %}{% endblock %}
-  </main>
-
-  <footer class="text-center text-muted py-3 border-top">
-    <small>Made by Abo - Sistema Checklist Veicoli</small>
-  </footer>
-</body>
-
+    </nav>
+    <main class="container mb-5">{% block main %}{% endblock %}</main>
+    <footer class="text-center text-muted py-3 border-top small">Made by abo &copy; 2025</footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
 </html>

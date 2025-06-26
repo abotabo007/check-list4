@@ -1,34 +1,47 @@
+
 {% extends "layout.html" %}
-{% block title %}All Completed Inspections{% endblock %}
+{% block title %}Tutte le Ispezioni{% endblock %}
 
 {% block main %}
-<h2>All Completed Inspections</h2>
+<h2 class="mb-4 text-center">📋 Ispezioni completate</h2>
 
 <div class="accordion" id="inspectionsAccordion">
   {% for ins in inspections %}
-  <div class="accordion-item">
+  <div class="accordion-item shadow-sm mb-3">
     <h2 class="accordion-header" id="heading{{ loop.index }}">
-      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ loop.index }}" aria-expanded="false" aria-controls="collapse{{ loop.index }}">
-        {{ ins.date }} | {{ ins.first_name }} {{ ins.last_name }} | Vehicle: {{ ins.v_id }}
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+              data-bs-target="#collapse{{ loop.index }}">
+        🗓️ {{ ins.date }} • 👤 {{ ins.first_name }} {{ ins.last_name }} • 🚗 Veicolo: {{ ins.v_id }}
       </button>
     </h2>
-    <div id="collapse{{ loop.index }}" class="accordion-collapse collapse" aria-labelledby="heading{{ loop.index }}" data-bs-parent="#inspectionsAccordion">
+    <div id="collapse{{ loop.index }}" class="accordion-collapse collapse" data-bs-parent="#inspectionsAccordion">
       <div class="accordion-body">
-        <strong>Inspector:</strong> {{ ins.first_name }} {{ ins.last_name }}<br>
-        <strong>Username:</strong> {{ ins.username }}<br>
-        <strong>Date & Time:</strong> {{ ins.date }}<br>
-        <strong>Vehicle ID:</strong> {{ ins.v_id }}<br>
-        <strong>Mileage:</strong> {{ ins.miles }}<br>
-        <strong>Next Oil Change:</strong> {{ ins.next_oil }}<br>
+        <div class="row mb-3">
+          <div class="col-md-6"><strong>Username:</strong> {{ ins.username }}</div>
+          <div class="col-md-6"><strong>Chilometraggio:</strong> {{ ins.miles }}</div>
+          <!-- <div class="col-md-6"><strong>Prossimo olio:</strong> {{ ins.next_oil }}</div> -->
+          <div class="col-md-6"><strong>Data:</strong> {{ ins.date }}</div>
+        </div>
         <hr>
         <strong>Checklist:</strong>
-        <ul>
-          {% for key, value in ins.items() %}
-            {% if key not in ['i_id', 'c_id', 'u_id', 'v_id', 'miles', 'next_oil', 'next_1', 'next_2', 'date', 'first_name', 'last_name', 'username', 'role'] and key.endswith('_t') == False and key.endswith('_b') == False %}
-              <li><strong>{{ key }}:</strong> {{ value }}</li>
-            {% endif %}
-          {% endfor %}
-        </ul>
+        <div class="row row-cols-1 row-cols-md-2">
+          <ul class="list-group list-group-flush">
+            {% for key, value in ins.items() %}
+              {% if key not in ['i_id', 'c_id', 'u_id', 'v_id', 'miles', 'next_oil', 'next_1', 'next_2', 'date', 'first_name', 'last_name', 'username', 'role']
+                    and not key.endswith('_t') and not key.endswith('_b') %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <span><strong>{{ key.replace('_', ' ').title() }}</strong></span>
+                  <span class="badge rounded-pill 
+                    {% if value == 1 %}bg-success
+                    {% elif value == 0 %}bg-danger
+                    {% else %}bg-secondary{% endif %}">
+                    {% if value == 1 %}OK{% elif value == 0 %}Non OK{% else %}N/D{% endif %}
+                  </span>
+                </li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </div>
       </div>
     </div>
   </div>

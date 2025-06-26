@@ -732,7 +732,7 @@ def vehicles():
                         # Append the mileage to the miles array
                         miles.append(array[1])
                         # Append the date in milliseconds from 1970 to the dates array
-                        d1 = datetime.datetime.strptime(array[2], '%Y-%m-%d')
+                        d1 = datetime.datetime.strptime(array[2], '%Y-%m-%d %H:%M:%S')
                         dates.append((d1 - d2)/datetime.timedelta(milliseconds=1))
                         j += 1
                     # Calculate projection
