@@ -1,8 +1,11 @@
-import datetime
-from flask import send_file, abort
-from docx import Document
+from flask import Blueprint, send_file, abort, session, render_template
+from flask import current_app as app
+from flask_login import login_required
 from io import BytesIO
-  # o importa da dove serve nel tuo progetto
+from docx import Document
+from fleets.db import get_db
+from fleets.helpers import permissions_required
+import datetime 
 
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for, jsonify
@@ -818,59 +821,65 @@ def all_inspections():
         "all_inspections.html",
         inspections=inspections
     )
-
 @bp.route("/inspection/export/<int:inspection_id>")
 @login_required
+@permissions_required  # Only admin/owner can export checklists
 def export_inspection(inspection_id):
     db = get_db()
 
-    # Recupera ispezione + info utente
+    # Fetch inspection and joined user info
     inspection = db.execute("""
-        SELECT i.id, i.created_at, i.plate, u.name, u.surname, i.user_id
-        FROM inspections i
-        JOIN users u ON i.user_id = u.id
-        WHERE i.id = ?
+        SELECT inspections.*, users.username
+        FROM inspections
+        LEFT JOIN users ON inspections.u_id = users.u_id
+        WHERE inspections.i_id = ?
     """, (inspection_id,)).fetchone()
 
     if inspection is None:
         abort(404, description="Ispezione non trovata")
 
-    # (Opzionale) Autorizzazione: solo chi ha effettuato l’ispezione può scaricarla
-    if inspection['user_id'] != session.get('user_id'):
+    # (Optional) Only allow the user who performed the inspection or admins/owners
+    user_id = session.get("user_id")
+    user_role = session.get("role", "")
+    if user_id != inspection["u_id"] and user_role not in ["admin", "owner"]:
         abort(403, description="Accesso negato")
 
-    # Recupera risposte associate
-    responses = db.execute("""
-        SELECT question, answer, notes
-        FROM responses
-        WHERE inspection_id = ?
-    """, (inspection_id,)).fetchall()
+    # Prepare checklist fields for export (excluding metadata and text/blob fields)
+    exclude_keys = {'i_id', 'c_id', 'u_id', 'v_id', 'miles', 'next_oil', 'next_1', 'next_2',
+                    'date', 'first_name', 'last_name', 'username', 'role'}
+    checklist = []
+    for key, value in dict(inspection).items():
+        if key in exclude_keys or key.endswith('_t') or key.endswith('_b'):
+            continue
+        checklist.append((key, value))
 
-    # Crea il documento Word
     doc = Document()
-    doc.add_heading("Checklist Ispezione", level=0)
-    doc.add_paragraph(f"Operatore: {inspection['name']} {inspection['surname']}")
-    doc.add_paragraph(f"Data ispezione: {inspection['created_at']}")
-    doc.add_paragraph(f"Targa veicolo: {inspection['plate']}")
+    doc.add_heading("Checklist Ispezione", level=1)
+
+    # Add metadata
+    doc.add_paragraph(f"Operatore: {inspection['first_name']} {inspection['last_name']}")
+    doc.add_paragraph(f"Username: {inspection['username']}")
+    doc.add_paragraph(f"Data ispezione: {inspection['date']}")
+    doc.add_paragraph(f"Veicolo ID: {inspection['v_id']}")
+    doc.add_paragraph(f"Chilometraggio: {inspection['miles']}")
     doc.add_paragraph("")
 
-    doc.add_heading("Risposte", level=1)
-    for r in responses:
-        doc.add_paragraph(f"Domanda: {r['question']}", style='List Bullet')
-        doc.add_paragraph(f"Risposta: {r['answer']}")
-        if r['notes']:
-            doc.add_paragraph(f"Note: {r['notes']}")
-        doc.add_paragraph("")
+    doc.add_heading("Risposte", level=2)
+    for key, value in checklist:
+        risposta = "OK" if value == 1 else "Non OK" if value == 0 else "N/D"
+        doc.add_paragraph(f"{key.replace('_', ' ').title()}: {risposta}", style="List Bullet")
 
-    # Stream del file DOCX
-    buffer = BytesIO()
-    doc.save(buffer)
-    buffer.seek(0)
+    # Prepare in-memory file
+    fakefile = BytesIO()
+    doc.save(fakefile)
+    fakefile.seek(0)
 
-    filename = f"checklist_{inspection_id}.docx"
+    # Filename with date and user for clarity
+    filename = f"ispezione_{inspection['date']}_{inspection['username']}.docx"
+
     return send_file(
-        buffer,
+        fakefile,
         as_attachment=True,
         download_name=filename,
-        mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        mimetype="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     )
