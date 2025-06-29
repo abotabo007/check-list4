@@ -15,7 +15,7 @@
     </div>
     <button class="btn btn-danger" type="submit">Ispeziona</button>
 </form>
-{% else %}
+{% elif v["v_id"] == 0 %}
 <h4>Ispezione veicolo {{ v["number"] }}: {{ v["year"] }} {{ v["make"] }} {{ v["model"] }}</h4>
 <div style="text-align:center; max-width:1100px; margin: auto;">
 <form action="/inspection" method="post">
