@@ -1,4 +1,8 @@
 import datetime
+from flask import send_file, abort
+from docx import Document
+from io import BytesIO
+  # o importa da dove serve nel tuo progetto
 
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for, jsonify
@@ -813,4 +817,60 @@ def all_inspections():
     return render_template(
         "all_inspections.html",
         inspections=inspections
+    )
+
+@bp.route("/inspection/export/<int:inspection_id>")
+@login_required
+def export_inspection(inspection_id):
+    db = get_db()
+
+    # Recupera ispezione + info utente
+    inspection = db.execute("""
+        SELECT i.id, i.created_at, i.plate, u.name, u.surname, i.user_id
+        FROM inspections i
+        JOIN users u ON i.user_id = u.id
+        WHERE i.id = ?
+    """, (inspection_id,)).fetchone()
+
+    if inspection is None:
+        abort(404, description="Ispezione non trovata")
+
+    # (Opzionale) Autorizzazione: solo chi ha effettuato l’ispezione può scaricarla
+    if inspection['user_id'] != session.get('user_id'):
+        abort(403, description="Accesso negato")
+
+    # Recupera risposte associate
+    responses = db.execute("""
+        SELECT question, answer, notes
+        FROM responses
+        WHERE inspection_id = ?
+    """, (inspection_id,)).fetchall()
+
+    # Crea il documento Word
+    doc = Document()
+    doc.add_heading("Checklist Ispezione", level=0)
+    doc.add_paragraph(f"Operatore: {inspection['name']} {inspection['surname']}")
+    doc.add_paragraph(f"Data ispezione: {inspection['created_at']}")
+    doc.add_paragraph(f"Targa veicolo: {inspection['plate']}")
+    doc.add_paragraph("")
+
+    doc.add_heading("Risposte", level=1)
+    for r in responses:
+        doc.add_paragraph(f"Domanda: {r['question']}", style='List Bullet')
+        doc.add_paragraph(f"Risposta: {r['answer']}")
+        if r['notes']:
+            doc.add_paragraph(f"Note: {r['notes']}")
+        doc.add_paragraph("")
+
+    # Stream del file DOCX
+    buffer = BytesIO()
+    doc.save(buffer)
+    buffer.seek(0)
+
+    filename = f"checklist_{inspection_id}.docx"
+    return send_file(
+        buffer,
+        as_attachment=True,
+        download_name=filename,
+        mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     )
