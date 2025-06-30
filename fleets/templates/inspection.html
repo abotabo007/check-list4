@@ -2,6 +2,7 @@
 {% extends "layout.html" %}
 {% block title %}Nuova Ispezione{% endblock %}
 {% block main %}
+<!-- {{ v }} -->
 {% if not vehicle %}
 <h4>Seleziona un veicolo da ispezionare</h4>
 <form action="/inspection" method="get">
@@ -15,7 +16,7 @@
     </div>
     <button class="btn btn-danger" type="submit">Ispeziona</button>
 </form>
-{% elif v["v_id"] == 0 %}
+{% elif v is defined and (v["vin"] == "ambulanza" or v["vin"] == "mezzo_1") %}
 <h4>Ispezione veicolo {{ v["number"] }}: {{ v["year"] }} {{ v["make"] }} {{ v["model"] }}</h4>
 <div style="text-align:center; max-width:1100px; margin: auto;">
 <form action="/inspection" method="post">
@@ -755,12 +756,57 @@
 </div>
 
 
+
+
     <input type="hidden" name="date" value="{{ date }}">
     <p><strong>Data e ora dell'ispezione:</strong> {{ date }}</p>
     <button type="button" class="btn btn-warning mb-3" id="check-all-btn">Check all OK (for testing)</button>
     <button name="vehicle" class="btn btn-danger" type="submit" value="{{ v["v_id"] }}">Aggiungi Ispezione</button>
 </form>
 </div>
+
+{% else %}
+<h4>Ispezione veicolo {{ v["number"] }}: {{ v["year"] }} {{ v["make"] }} {{ v["model"] }}</h4>
+<div style="text-align:center; max-width:1100px; margin: auto;">
+<form action="/inspection" method="post">
+    <input required autocomplete="off" class="form-control mx-auto w-auto" id="miles" name="miles" placeholder="Chilometraggio attuale" type="number">
+    <input type="hidden" name="maintenance" value="0">
+    <input required autocomplete="off" class="form-control mx-auto w-auto" id="first_name" name="first_name" placeholder="First Name" type="text">
+    <input required autocomplete="off" class="form-control mx-auto w-auto" id="last_name" name="last_name" placeholder="Last Name" type="text">
+
+    
+<div class="accordion mb-3" id="accordion-1">
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="heading-1">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-1">
+        🧾 Vano Guida
+      </button>
+    </h2>
+    <div id="collapse-1" class="accordion-collapse collapse">
+      <div class="accordion-body">
+        <table class="table table-hover table-sm">
+          <tbody>
+            {% for ins in inspection[0:13] %}
+            <tr>
+              <td style="text-align:right;">{{ ins[3] }}</td>
+              <td><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</td>
+              <td><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</td>
+              <td><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=2> N/D</td>
+              <td><input class="form-control" name="{{ ins[1] }}" type="text" style="visibility:hidden"></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    </div>
+    </div>
+        {% for i in range(13, 179) %}
+            <input type="hidden" name="{{ inspection[i][0] }}" value="1">
+        {% endfor %}
+        <button type="button" class="btn btn-warning mb-3" id="check-all-btn">Check all OK (for testing)</button>
+        <button name="vehicle" class="btn btn-danger" type="submit" value="{{ v["v_id"] }}">Aggiungi Ispezione</button>
+    </form>
 
 <script>
 document.getElementById('check-all-btn').onclick = function() {
