@@ -808,30 +808,43 @@ def all_inspections():
     db = get_db()
     inspections = as_dict(db.execute(
         """
-        SELECT inspections.*, users.username, users.role
+        SELECT inspections.*, users.username, users.role, vehicles.vin
         FROM inspections
         LEFT JOIN users ON inspections.u_id = users.u_id
+        LEFT JOIN vehicles ON inspections.v_id = vehicles.v_id
         WHERE inspections.c_id = ?
         ORDER BY inspections.date DESC
         """,
         [session.get("c_id")]
     ).fetchall())
-
+    # inside your route
+    for ins in inspections:
+        ins['vin'] = ins['v_id']  # Add this lin
+        checklist_items = []
+        for key, value in ins.items():
+            if (
+                key not in ['i_id', 'c_id', 'u_id', 'v_id', 'miles', 'next_oil', 'next_1', 'next_2', 'date', 'first_name', 'last_name', 'username', 'role']
+                and not key.endswith('_t') and not key.endswith('_b')
+            ):
+                checklist_items.append((key, value))
+        ins['checklist_items'] = checklist_items
+    
     return render_template(
         "all_inspections.html",
         inspections=inspections
-    )
+    )   
 @bp.route("/inspection/export/<int:inspection_id>")
 @login_required
 @permissions_required  # Only admin/owner can export checklists
 def export_inspection(inspection_id):
     db = get_db()
 
-    # Fetch inspection and joined user info
+    # Fetch inspection, joined user info, and VIN from vehicles
     inspection = db.execute("""
-        SELECT inspections.*, users.username
+        SELECT inspections.*, users.username, vehicles.vin
         FROM inspections
         LEFT JOIN users ON inspections.u_id = users.u_id
+        LEFT JOIN vehicles ON inspections.v_id = vehicles.v_id
         WHERE inspections.i_id = ?
     """, (inspection_id,)).fetchone()
 
@@ -846,12 +859,16 @@ def export_inspection(inspection_id):
 
     # Prepare checklist fields for export (excluding metadata and text/blob fields)
     exclude_keys = {'i_id', 'c_id', 'u_id', 'v_id', 'miles', 'next_oil', 'next_1', 'next_2',
-                    'date', 'first_name', 'last_name', 'username', 'role'}
+                    'date', 'first_name', 'last_name', 'username', 'role', 'vin'}
     checklist = []
     for key, value in dict(inspection).items():
         if key in exclude_keys or key.endswith('_t') or key.endswith('_b'):
             continue
         checklist.append((key, value))
+
+    # SLICE checklist if ambulance
+    if inspection['vin'] != 'ambulanza' and inspection['vin'] != 'mezzo_1':
+        checklist = checklist[:13]
 
     doc = Document()
     doc.add_heading("Checklist Ispezione", level=1)
@@ -860,7 +877,7 @@ def export_inspection(inspection_id):
     doc.add_paragraph(f"Operatore: {inspection['first_name']} {inspection['last_name']}")
     doc.add_paragraph(f"Username: {inspection['username']}")
     doc.add_paragraph(f"Data ispezione: {inspection['date']}")
-    doc.add_paragraph(f"Veicolo ID: {inspection['v_id']}")
+    doc.add_paragraph(f"Veicolo VIN: {inspection['vin']}")
     doc.add_paragraph(f"Chilometraggio: {inspection['miles']}")
     doc.add_paragraph("")
 
