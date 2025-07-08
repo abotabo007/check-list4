@@ -282,14 +282,17 @@ def add_user():
 # @login_required
 def inspection():
     """Creates an inspection"""
-    # If request is GET render the page
+
+    db = get_db()
+
     if request.method == "GET":
+        # ✅ Modifica indispensabile: usa c_id di default se non loggato
+        c_id = session.get("c_id", 1)   
+
         # If vehicle is not in get request
         if not request.args.get("vehicle"):
             # Get all the company vehicles from DB
-            db = get_db()
-            vehicles = as_dict(db.execute("SELECT * FROM vehicles WHERE c_id = ? ORDER BY number", [session.get("c_id")]).fetchall())
-
+            vehicles = as_dict(db.execute("SELECT * FROM vehicles WHERE c_id = ? ORDER BY number", [c_id]).fetchall())
 
             # If only one vehicle just go to inspect that one, otherwise render template to select it
             if len(vehicles) == 1:
@@ -297,31 +300,27 @@ def inspection():
             else:
                 return render_template("inspection.html", vehicles=vehicles)
 
-        # If vechicle is in get request
+        # If vehicle is in get request
         else:
-            # Query DB for that vehicle
-            db = get_db()
+            # ✅ Modifica indispensabile: usa c_id anche qui
             v = as_dict(db.execute("SELECT * FROM vehicles WHERE number = ? AND c_id = ?",
-                                    [request.args.get("vehicle"), session.get("c_id")]).fetchall())
+                                    [request.args.get("vehicle"), c_id]).fetchall())
 
             # If no such vehicle redirect to inspection
             if len(v) != 1:
-
                 flash('Wrong parameter', 'error')
                 return redirect(url_for(".inspection"))
 
             # Get next oil change from last inspection
             oil = db.execute("SELECT next_oil FROM inspections WHERE v_id = ? ORDER BY date DESC", [v[0]["v_id"]]).fetchone()
 
-
             # pass the info to render the inspection for that vehicle
             return render_template("inspection.html", inspection=c1, vehicle=request.args.get("vehicle"),
                                         v=v[0], oil=oil, date = datetime.now(ZoneInfo("Europe/Rome")).strftime('%d/%m/%Y %H:%M:%S'))
 
-    # If request is post (Meaning: user sumbited an inspection)
+    # If request is post (Meaning: user submitted an inspection)
     else:
         # Query DB for that vehicle
-        db = get_db()
         v = as_dict(db.execute("SELECT * FROM vehicles WHERE v_id = ? AND c_id = ?",
                                 [request.form.get("vehicle"), session.get("c_id")]).fetchall())
         if v:
@@ -329,7 +328,6 @@ def inspection():
         else:
             flash('Something went wrong with that request')
             return redirect(url_for('.inspection'))
-
 
         # Check that the important inputs have data, if not, render an apology
         checks = check_inputs(request.form, ["vehicle", "miles", "maintenance", "first_name", "last_name"], False)
@@ -346,14 +344,9 @@ def inspection():
                                 inspection=c1, vehicle=v[0]["number"], v=v[0], oil=request.form.get("maintenance"),
                                 date = datetime.now(ZoneInfo("Europe/Rome")).strftime('%d/%m/%Y %H:%M:%S'))
 
-        # Create the DB query dinamically depending on the data sumbited
-        # query will always start the same way
+        # Create the DB query dynamically depending on the data submitted
         query = "INSERT INTO inspections (c_id, u_id, v_id, miles, next_oil, date, first_name, last_name"
-
-        # values will be all the question marks (which should be the same number as variables to insert)
         values = "(?, ?, ?, ?, ?, ?, ?, ?"
-
-        # vars will be an array with al the variables to insert
         vars = [
             session.get("c_id"),
             session.get("user_id"),
@@ -363,9 +356,9 @@ def inspection():
             datetime.now(ZoneInfo("Europe/Rome")).strftime('%Y-%m-%d %H:%M:%S'),
             request.form.get("first_name"),
             request.form.get("last_name"),
-]
+        ]
 
-        # iterate over c1 to get whatever the user submited
+        # iterate over c1 to get whatever the user submitted
         for c in c1:
             if request.form.get(c[0]):
                 query += ", " + c[0]
@@ -383,20 +376,15 @@ def inspection():
         # assemble the final query string
         query += ") VALUES " + values + ")"
 
-        # Submit the quiery to the database
-        db = get_db()
+        # Submit the query to the database
         try:
             with db:
                 db.execute(query, vars)
         except db.IntegrityError:
-            # If there was an error flash the user
-            print(db.IntegrityError)
             return feedback('Database: Error adding inspection, contact support', "inspection.html", to_dict(request.form), "i", 400,
                                 inspection=c1, vehicle=v[0]["number"], v=v[0], oil=request.form.get("maintenance"),
                                 date = datetime.now(ZoneInfo("Europe/Rome")).strftime('%d/%m/%Y %H:%M:%S'))
         else:
-            # Confirm to the user and redirect to home
-
             flash("Inspection added!")
             return redirect(url_for(".index"))
 
