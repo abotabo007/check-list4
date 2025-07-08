@@ -1,36 +1,3 @@
-/* Responsività: impila righe della tabella su mobile */
-@media (max-width: 768px) {
-  .table thead {
-    display: none;
-  }
-  .table tbody tr {
-    display: block;
-    border: 1px solid #ddd;
-    margin-bottom: 1rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
-    border-radius: 8px;
-    background: #fff;
-    padding: 0.5rem;
-  }
-  .table tbody td {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.5rem 0;
-    border: none;
-    position: relative;
-    font-size: 1em;
-  }
-  .table tbody td::before {
-    content: attr(data-label);
-    font-weight: bold;
-    color: #d9534f;
-    flex-basis: 50%;
-    text-align: left;
-    padding-right: 1em;
-  }
-}
-
 /* Stile generale */
 body {
   background-color: #f8f9fa;
@@ -75,4 +42,13 @@ footer {
     padding: 0.3rem 0.5rem;
     font-size: 0.95em;
   }
+}
+
+
+.table.checklist input[type="text"] {
+  display: none !important;
+}
+.table.checklist td label,
+.table.checklist .form-check-input {
+  white-space: nowrap;
 }

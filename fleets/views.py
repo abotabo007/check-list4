@@ -286,6 +286,9 @@ def inspection():
     db = get_db()
 
     if request.method == "GET":
+        user_id = session.get("user_id")
+        if user_id is None:
+            user_id = 0  # valore di default per utente anonimo
         # ✅ Modifica indispensabile: usa c_id di default se non loggato
         c_id = session.get("c_id", 1)   
 
@@ -320,9 +323,13 @@ def inspection():
 
     # If request is post (Meaning: user submitted an inspection)
     else:
+        user_id = session.get("user_id")
+        if user_id is None:
+            user_id = 0  # valore di default per utente anonimo
+        c_id = session.get("c_id", 1)
         # Query DB for that vehicle
         v = as_dict(db.execute("SELECT * FROM vehicles WHERE v_id = ? AND c_id = ?",
-                                [request.form.get("vehicle"), session.get("c_id")]).fetchall())
+                                [request.form.get("vehicle"),c_id]).fetchall())
         if v:
             oil = db.execute("SELECT next_oil FROM inspections WHERE v_id = ? ORDER BY date DESC", [v[0]["v_id"]]).fetchone()
         else:
@@ -348,8 +355,8 @@ def inspection():
         query = "INSERT INTO inspections (c_id, u_id, v_id, miles, next_oil, date, first_name, last_name"
         values = "(?, ?, ?, ?, ?, ?, ?, ?"
         vars = [
-            session.get("c_id"),
-            session.get("user_id"),
+            c_id,
+            user_id, 
             request.form.get("vehicle"),
             request.form.get("miles"),
             request.form.get("maintenance"),

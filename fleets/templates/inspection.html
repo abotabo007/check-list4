@@ -7,7 +7,7 @@
 <h4>Seleziona un veicolo da ispezionare</h4>
 <form action="/inspection" method="get">
     <div class="mb-3">
-        <select class="form-select mx-auto" name="vehicle" style="width: auto; margin-bottom:1em">
+        <select class="form-select mx-auto" name="vehicle" >
             <option disabled selected>Veicolo</option>
             {% for v in vehicles %}
                 <option value="{{ v["number"] }}">Veicolo {{ v["number"] }}</option>
@@ -18,12 +18,12 @@
 </form>
 {% elif v is defined and (v["vin"] == "ambulanza" or v["vin"] == "mezzo_1") %}
 <h4>Ispezione veicolo {{ v["number"] }}: {{ v["year"] }} {{ v["make"] }} {{ v["model"] }}</h4>
-<div style="text-align:center; max-width:100%; padding: 0 1rem; box-sizing: border-box;">
+<div >
 <form action="/inspection" method="post">
     <input required autocomplete="off" class="form-control mx-auto w-auto" id="miles" name="miles" placeholder="Chilometraggio attuale" type="number">
     <input type="hidden" name="maintenance" value="0">
-    <input required autocomplete="off" class="form-control mx-auto w-auto" id="first_name" name="first_name" placeholder="First Name" type="text">
-    <input required autocomplete="off" class="form-control mx-auto w-auto" id="last_name" name="last_name" placeholder="Last Name" type="text">
+    <input required autocomplete="off" class="form-control mx-auto w-auto" id="first_name" name="first_name" placeholder="nome" type="text">
+    <input required autocomplete="off" class="form-control mx-auto w-auto" id="last_name" name="last_name" placeholder="cognome" type="text">
 
 
 <div class="accordion mb-3" id="accordion-1">
@@ -35,14 +35,13 @@
     </h2>
     <div id="collapse-1" class="accordion-collapse collapse">
       <div class="accordion-body">
-        <div style="overflow-x: auto;"><table class="table table-hover table-sm">
+        <div ><table class="table checklist table-hover table-sm">
           <tbody>
             {% for ins in inspection[0:13] %}
             <tr>
-              <td style="text-align:right;">{{ ins[3] }}</td>
-               <td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
-<td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td>>
-              <td><input class="form-control" name="{{ ins[1] }}" type="text" style="visibility:hidden"></td>
+              <td >{{ ins[3] }}</td>
+               <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
+<td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td><td><input class="form-control" name="{{ ins[1] }}" type="text"  style="display:none"></td>
             </tr>
             {% endfor %}
           </tbody>
@@ -61,14 +60,13 @@
     </h2>
     <div id="collapse-2" class="accordion-collapse collapse">
       <div class="accordion-body">
-        <div style="overflow-x: auto;"><table class="table table-hover table-sm">
+        <div ><table class="table checklist table-hover table-sm">
           <tbody>
             {% for ins in inspection[13:21] %}
             <tr>
-              <td style="text-align:right;">{{ ins[3] }}</td>
-               <td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
-<td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td>>
-              <td><input class="form-control" name="{{ ins[1] }}" type="text" style="visibility:hidden"></td>
+              <td >{{ ins[3] }}</td>
+               <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
+<td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td><td><input class="form-control" name="{{ ins[1] }}" type="text"  style="display:none"></td>
             </tr>
             {% endfor %}
           </tbody>
@@ -87,14 +85,13 @@
     </h2>
     <div id="collapse-3" class="accordion-collapse collapse">
       <div class="accordion-body">
-        <div style="overflow-x: auto;"><table class="table table-hover table-sm">
+        <div ><table class="table checklist table-hover table-sm">
           <tbody>
             {% for ins in inspection[21:25] %}
             <tr>
-              <td style="text-align:right;">{{ ins[3] }}</td>
-               <td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
-<td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td>>
-              <td><input class="form-control" name="{{ ins[1] }}" type="text" style="visibility:hidden"></td>
+              <td >{{ ins[3] }}</td>
+               <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
+<td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td><td><input class="form-control" name="{{ ins[1] }}" type="text"  style="display:none"></td>
             </tr>
             {% endfor %}
           </tbody>
@@ -113,14 +110,13 @@
     </h2>
     <div id="collapse-4" class="accordion-collapse collapse">
       <div class="accordion-body">
-        <div style="overflow-x: auto;"><table class="table table-hover table-sm">
+        <div ><table class="table checklist table-hover table-sm">
           <tbody>
             {% for ins in inspection[25:55] %}
             <tr>
-              <td style="text-align:right;">{{ ins[3] }}</td>
-               <td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
-<td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td>>
-              <td><input class="form-control" name="{{ ins[1] }}" type="text" style="visibility:hidden"></td>
+              <td >{{ ins[3] }}</td>
+               <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
+<td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td><td><input class="form-control" name="{{ ins[1] }}" type="text"  style="display:none"></td>
             </tr>
             {% endfor %}
           </tbody>
@@ -139,14 +135,13 @@
     </h2>
     <div id="collapse-5" class="accordion-collapse collapse">
       <div class="accordion-body">
-        <div style="overflow-x: auto;"><table class="table table-hover table-sm">
+        <div ><table class="table checklist table-hover table-sm">
           <tbody>
             {% for ins in inspection[55:60] %}
             <tr>
-              <td style="text-align:right;">{{ ins[3] }}</td>
-               <td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
-<td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td>>
-              <td><input class="form-control" name="{{ ins[1] }}" type="text" style="visibility:hidden"></td>
+              <td >{{ ins[3] }}</td>
+               <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
+<td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td><td><input class="form-control" name="{{ ins[1] }}" type="text"  style="display:none"></td>
             </tr>
             {% endfor %}
           </tbody>
@@ -165,14 +160,13 @@
     </h2>
     <div id="collapse-6" class="accordion-collapse collapse">
       <div class="accordion-body">
-        <div style="overflow-x: auto;"><table class="table table-hover table-sm">
+        <div ><table class="table checklist table-hover table-sm">
           <tbody>
             {% for ins in inspection[60:65] %}
             <tr>
-              <td style="text-align:right;">{{ ins[3] }}</td>
-               <td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
-<td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td>>
-              <td><input class="form-control" name="{{ ins[1] }}" type="text" style="visibility:hidden"></td>
+              <td >{{ ins[3] }}</td>
+               <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
+<td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td><td><input class="form-control" name="{{ ins[1] }}" type="text"  style="display:none"></td>
             </tr>
             {% endfor %}
           </tbody>
@@ -191,14 +185,13 @@
     </h2>
     <div id="collapse-7" class="accordion-collapse collapse">
       <div class="accordion-body">
-        <div style="overflow-x: auto;"><table class="table table-hover table-sm">
+        <div ><table class="table checklist table-hover table-sm">
           <tbody>
             {% for ins in inspection[65:84] %}
             <tr>
-              <td style="text-align:right;">{{ ins[3] }}</td>
-               <td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
-<td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td>>
-              <td><input class="form-control" name="{{ ins[1] }}" type="text" style="visibility:hidden"></td>
+              <td >{{ ins[3] }}</td>
+               <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
+<td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td><td><input class="form-control" name="{{ ins[1] }}" type="text"  style="display:none"></td>
             </tr>
             {% endfor %}
           </tbody>
@@ -217,14 +210,13 @@
     </h2>
     <div id="collapse-8" class="accordion-collapse collapse">
       <div class="accordion-body">
-        <div style="overflow-x: auto;"><table class="table table-hover table-sm">
+        <div ><table class="table checklist table-hover table-sm">
           <tbody>
             {% for ins in inspection[84:89] %}
             <tr>
-              <td style="text-align:right;">{{ ins[3] }}</td>
-               <td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
-<td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td>>
-              <td><input class="form-control" name="{{ ins[1] }}" type="text" style="visibility:hidden"></td>
+              <td >{{ ins[3] }}</td>
+               <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
+<td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td><td><input class="form-control" name="{{ ins[1] }}" type="text"  style="display:none"></td>
             </tr>
             {% endfor %}
           </tbody>
@@ -243,14 +235,13 @@
     </h2>
     <div id="collapse-9" class="accordion-collapse collapse">
       <div class="accordion-body">
-        <div style="overflow-x: auto;"><table class="table table-hover table-sm">
+        <div ><table class="table checklist table-hover table-sm">
           <tbody>
             {% for ins in inspection[89:94] %}
             <tr>
-              <td style="text-align:right;">{{ ins[3] }}</td>
-               <td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
-<td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td>>
-              <td><input class="form-control" name="{{ ins[1] }}" type="text" style="visibility:hidden"></td>
+              <td >{{ ins[3] }}</td>
+               <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
+<td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td><td><input class="form-control" name="{{ ins[1] }}" type="text"  style="display:none"></td>
             </tr>
             {% endfor %}
           </tbody>
@@ -269,14 +260,13 @@
     </h2>
     <div id="collapse-10" class="accordion-collapse collapse">
       <div class="accordion-body">
-        <div style="overflow-x: auto;"><table class="table table-hover table-sm">
+        <div ><table class="table checklist table-hover table-sm">
           <tbody>
             {% for ins in inspection[94:97] %}
             <tr>
-              <td style="text-align:right;">{{ ins[3] }}</td>
-               <td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
-<td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td>>
-              <td><input class="form-control" name="{{ ins[1] }}" type="text" style="visibility:hidden"></td>
+              <td >{{ ins[3] }}</td>
+               <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
+<td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td><td><input class="form-control" name="{{ ins[1] }}" type="text"  style="display:none"></td>
             </tr>
             {% endfor %}
           </tbody>
@@ -295,14 +285,13 @@
     </h2>
     <div id="collapse-11" class="accordion-collapse collapse">
       <div class="accordion-body">
-        <div style="overflow-x: auto;"><table class="table table-hover table-sm">
+        <div ><table class="table checklist table-hover table-sm">
           <tbody>
             {% for ins in inspection[97:103] %}
             <tr>
-              <td style="text-align:right;">{{ ins[3] }}</td>
-               <td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
-<td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td>>
-                <td><input class="form-control" name="{{ ins[1] }}" type="text" style="visibility:hidden"></td>
+              <td >{{ ins[3] }}</td>
+               <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
+<td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td><td><input class="form-control" name="{{ ins[1] }}" type="text"  style="display:none"></td>
             </tr>
             {% endfor %}
           </tbody>
@@ -321,14 +310,13 @@
     </h2>
     <div id="collapse-12" class="accordion-collapse collapse">
       <div class="accordion-body">
-        <div style="overflow-x: auto;"><table class="table table-hover table-sm">
+        <div ><table class="table checklist table-hover table-sm">
           <tbody>
             {% for ins in inspection[103:110] %}
             <tr>
-              <td style="text-align:right;">{{ ins[3] }}</td>
-               <td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
-<td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td>>
-              <td><input class="form-control" name="{{ ins[1] }}" type="text" style="visibility:hidden"></td>
+              <td >{{ ins[3] }}</td>
+               <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
+<td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td><td><input class="form-control" name="{{ ins[1] }}" type="text"  style="display:none"></td>
             </tr>
             {% endfor %}
           </tbody>
@@ -347,14 +335,13 @@
     </h2>
     <div id="collapse-13" class="accordion-collapse collapse">
       <div class="accordion-body">
-        <div style="overflow-x: auto;"><table class="table table-hover table-sm">
+        <div ><table class="table checklist table-hover table-sm">
           <tbody>
             {% for ins in inspection[110:117] %}
             <tr>
-              <td style="text-align:right;">{{ ins[3] }}</td>
-               <td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
-<td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td>>
-              <td><input class="form-control" name="{{ ins[1] }}" type="text" style="visibility:hidden"></td>
+              <td >{{ ins[3] }}</td>
+               <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
+<td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td><td><input class="form-control" name="{{ ins[1] }}" type="text"  style="display:none"></td>
             </tr>
             {% endfor %}
           </tbody>
@@ -373,14 +360,13 @@
     </h2>
     <div id="collapse-14" class="accordion-collapse collapse">
       <div class="accordion-body">
-        <div style="overflow-x: auto;"><table class="table table-hover table-sm">
+        <div ><table class="table checklist table-hover table-sm">
           <tbody>
             {% for ins in inspection[117:123] %}
             <tr>
-              <td style="text-align:right;">{{ ins[3] }}</td>
-               <td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
-<td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td>>
-              <td><input class="form-control" name="{{ ins[1] }}" type="text" style="visibility:hidden"></td>
+              <td >{{ ins[3] }}</td>
+               <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
+<td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td><td><input class="form-control" name="{{ ins[1] }}" type="text"  style="display:none"></td>
             </tr>
             {% endfor %}
           </tbody>
@@ -399,14 +385,13 @@
     </h2>
     <div id="collapse-15" class="accordion-collapse collapse">
       <div class="accordion-body">
-        <div style="overflow-x: auto;"><table class="table table-hover table-sm">
+        <div ><table class="table checklist table-hover table-sm">
           <tbody>
             {% for ins in inspection[123:130] %}
             <tr>
-              <td style="text-align:right;">{{ ins[3] }}</td>
-               <td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
-<td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td>>
-              <td><input class="form-control" name="{{ ins[1] }}" type="text" style="visibility:hidden"></td>
+              <td >{{ ins[3] }}</td>
+               <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
+<td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td><td><input class="form-control" name="{{ ins[1] }}" type="text"  style="display:none"></td>
             </tr>
             {% endfor %}
           </tbody>
@@ -425,14 +410,13 @@
     </h2>
     <div id="collapse-16" class="accordion-collapse collapse">
       <div class="accordion-body">
-        <div style="overflow-x: auto;"><table class="table table-hover table-sm">
+        <div ><table class="table checklist table-hover table-sm">
           <tbody>
             {% for ins in inspection[130:140] %}
             <tr>
-              <td style="text-align:right;">{{ ins[3] }}</td>
-               <td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
-<td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td>>
-              <td><input class="form-control" name="{{ ins[1] }}" type="text" style="visibility:hidden"></td>
+              <td >{{ ins[3] }}</td>
+               <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
+<td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td><td><input class="form-control" name="{{ ins[1] }}" type="text"  style="display:none"></td>
             </tr>
             {% endfor %}
           </tbody>
@@ -451,14 +435,13 @@
     </h2>
     <div id="collapse-17" class="accordion-collapse collapse">
       <div class="accordion-body">
-        <div style="overflow-x: auto;"><table class="table table-hover table-sm">
+        <div ><table class="table checklist table-hover table-sm">
           <tbody>
             {% for ins in inspection[140:151] %}
             <tr>
-              <td style="text-align:right;">{{ ins[3] }}</td>
-               <td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
-<td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td>>
-              <td><input class="form-control" name="{{ ins[1] }}" type="text" style="visibility:hidden"></td>
+              <td >{{ ins[3] }}</td>
+               <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
+<td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td><td><input class="form-control" name="{{ ins[1] }}" type="text"  style="display:none"></td>
             </tr>
             {% endfor %}
           </tbody>
@@ -477,14 +460,13 @@
     </h2>
     <div id="collapse-18" class="accordion-collapse collapse">
       <div class="accordion-body">
-        <div style="overflow-x: auto;"><table class="table table-hover table-sm">
+        <div ><table class="table checklist table-hover table-sm">
           <tbody>
             {% for ins in inspection[151:157] %}
             <tr>
-              <td style="text-align:right;">{{ ins[3] }}</td>
-               <td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
-<td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td>>
-              <td><input class="form-control" name="{{ ins[1] }}" type="text" style="visibility:hidden"></td>
+              <td >{{ ins[3] }}</td>
+               <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
+<td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td><td><input class="form-control" name="{{ ins[1] }}" type="text"  style="display:none"></td>
             </tr>
             {% endfor %}
           </tbody>
@@ -503,14 +485,13 @@
     </h2>
     <div id="collapse-19" class="accordion-collapse collapse">
       <div class="accordion-body">
-        <div style="overflow-x: auto;"><table class="table table-hover table-sm">
+        <div ><table class="table checklist table-hover table-sm">
           <tbody>
             {% for ins in inspection[157:160] %}
             <tr>
-              <td style="text-align:right;">{{ ins[3] }}</td>
-               <td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
-<td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td>>
-              <td><input class="form-control" name="{{ ins[1] }}" type="text" style="visibility:hidden"></td>
+              <td >{{ ins[3] }}</td>
+               <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
+<td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td><td><input class="form-control" name="{{ ins[1] }}" type="text"  style="display:none"></td>
             </tr>
             {% endfor %}
           </tbody>
@@ -529,14 +510,13 @@
     </h2>
     <div id="collapse-20" class="accordion-collapse collapse">
       <div class="accordion-body">
-        <div style="overflow-x: auto;"><table class="table table-hover table-sm">
+        <div ><table class="table checklist table-hover table-sm">
           <tbody>
             {% for ins in inspection[160:162] %}
             <tr>
-              <td style="text-align:right;">{{ ins[3] }}</td>
-               <td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
-<td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td>>
-              <td><input class="form-control" name="{{ ins[1] }}" type="text" style="visibility:hidden"></td>
+              <td >{{ ins[3] }}</td>
+               <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
+<td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td><td><input class="form-control" name="{{ ins[1] }}" type="text"  style="display:none"></td>
             </tr>
             {% endfor %}
           </tbody>
@@ -555,14 +535,13 @@
     </h2>
     <div id="collapse-21" class="accordion-collapse collapse">
       <div class="accordion-body">
-        <div style="overflow-x: auto;"><table class="table table-hover table-sm">
+        <div ><table class="table checklist table-hover table-sm">
           <tbody>
             {% for ins in inspection[162:165] %}
             <tr>
-              <td style="text-align:right;">{{ ins[3] }}</td>
-               <td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
-<td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td>>
-              <td><input class="form-control" name="{{ ins[1] }}" type="text" style="visibility:hidden"></td>
+              <td >{{ ins[3] }}</td>
+               <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
+<td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td><td><input class="form-control" name="{{ ins[1] }}" type="text"  style="display:none"></td>
             </tr>
             {% endfor %}
           </tbody>
@@ -581,14 +560,13 @@
     </h2>
     <div id="collapse-22" class="accordion-collapse collapse">
       <div class="accordion-body">
-        <div style="overflow-x: auto;"><table class="table table-hover table-sm">
+        <div ><table class="table checklist table-hover table-sm">
           <tbody>
             {% for ins in inspection[165:168] %}
             <tr>
-              <td style="text-align:right;">{{ ins[3] }}</td>
-               <td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
-<td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td>>
-              <td><input class="form-control" name="{{ ins[1] }}" type="text" style="visibility:hidden"></td>
+              <td >{{ ins[3] }}</td>
+               <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
+<td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td><td><input class="form-control" name="{{ ins[1] }}" type="text"  style="display:none"></td>
             </tr>
             {% endfor %}
           </tbody>
@@ -607,14 +585,13 @@
     </h2>
     <div id="collapse-23" class="accordion-collapse collapse">
       <div class="accordion-body">
-        <div style="overflow-x: auto;"><table class="table table-hover table-sm">
+        <div ><table class="table checklist table-hover table-sm">
           <tbody>
             {% for ins in inspection[168:184] %}
             <tr>
-              <td style="text-align:right;">{{ ins[3] }}</td>
-               <td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
-<td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td>>
-              <td><input class="form-control" name="{{ ins[1] }}" type="text" style="visibility:hidden"></td>
+              <td >{{ ins[3] }}</td>
+               <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
+<td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td><td><input class="form-control" name="{{ ins[1] }}" type="text"  style="display:none"></td>
             </tr>
             {% endfor %}
           </tbody>
@@ -633,14 +610,13 @@
     </h2>
     <div id="collapse-24" class="accordion-collapse collapse">
       <div class="accordion-body">
-        <div style="overflow-x: auto;"><table class="table table-hover table-sm">
+        <div ><table class="table checklist table-hover table-sm">
           <tbody>
             {% for ins in inspection[184:194] %}
             <tr>
-              <td style="text-align:right;">{{ ins[3] }}</td>
-               <td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
-<td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td>>
-              <td><input class="form-control" name="{{ ins[1] }}" type="text" style="visibility:hidden"></td>
+              <td >{{ ins[3] }}</td>
+               <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
+<td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td><td><input class="form-control" name="{{ ins[1] }}" type="text"  style="display:none"></td>
             </tr>
             {% endfor %}
           </tbody>
@@ -659,14 +635,13 @@
     </h2>
     <div id="collapse-25" class="accordion-collapse collapse">
       <div class="accordion-body">
-        <div style="overflow-x: auto;"><table class="table table-hover table-sm">
+        <div ><table class="table checklist table-hover table-sm">
           <tbody>
             {% for ins in inspection[194:201] %}
             <tr>
-              <td style="text-align:right;">{{ ins[3] }}</td>
-               <td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
-                <td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td>>
-              <td><input class="form-control" name="{{ ins[1] }}" type="text" style="visibility:hidden"></td>
+              <td >{{ ins[3] }}</td>
+               <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
+                <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td><td><input class="form-control" name="{{ ins[1] }}" type="text"  style="display:none"></td>
             </tr>
             {% endfor %}
           </tbody>
@@ -685,14 +660,13 @@
     </h2>
     <div id="collapse-26" class="accordion-collapse collapse">
       <div class="accordion-body">
-        <div style="overflow-x: auto;"><table class="table table-hover table-sm">
+        <div ><table class="table checklist table-hover table-sm">
           <tbody>
             {% for ins in inspection[201:207] %}
             <tr>
-              <td style="text-align:right;">{{ ins[3] }}</td>
-               <td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
-<td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td>>
-              <td><input class="form-control" name="{{ ins[1] }}" type="text" style="visibility:hidden"></td>
+              <td >{{ ins[3] }}</td>
+               <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
+<td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td><td><input class="form-control" name="{{ ins[1] }}" type="text"  style="display:none"></td>
             </tr>
             {% endfor %}
           </tbody>
@@ -701,6 +675,7 @@
     </div>
   </div>
 </div>
+
 
 <div class="accordion mb-3" id="accordion-27">
   <div class="accordion-item">
@@ -711,14 +686,14 @@
     </h2>
     <div id="collapse-27" class="accordion-collapse collapse">
       <div class="accordion-body">
-        <div style="overflow-x: auto;"><table class="table table-hover table-sm">
+        <div><table class="table checklist table-hover table-sm">
           <tbody>
             {% for ins in inspection[207:211] %}
             <tr>
               <td style="text-align:right;">{{ ins[3] }}</td>
-               <td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
-<td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td>>
-              <td><input class="form-control" name="{{ ins[1] }}" type="text" style="visibility:hidden"></td>
+              <td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
+              <td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td>
+              <td><input class="form-control" name="{{ ins[1] }}" type="text" style="visibility:hidden" style="display:none"></td>
             </tr>
             {% endfor %}
           </tbody>
@@ -728,26 +703,21 @@
   </div>
 </div>
 
-
-
-
-    <input type="hidden" name="date" value="{{ date }}">
-    <p><strong>Data e ora dell'ispezione:</strong> {{ date }}</p>
-        <button type="button" class="btn btn-warning mb-3" id="check-all-btn">Check all OK (for testing)</button>
-
-    <button name="vehicle" class="btn btn-danger" type="submit" value="{{ v["v_id"] }}">Aggiungi Ispezione</button>
+<input type="hidden" name="date" value="{{ date }}">
+<p><strong>Data e ora dell'ispezione:</strong> {{ date }}</p>
+<button type="button" class="btn btn-warning mb-3" id="check-all-btn">Check all OK (for testing)</button>
+<button name="vehicle" class="btn btn-danger" type="submit" value="{{ v["v_id"] }}">Aggiungi Ispezione</button>
 </form>
 </div>
 
 {% else %}
 <h4>Ispezione veicolo {{ v["number"] }}: {{ v["year"] }} {{ v["make"] }} {{ v["model"] }}</h4>
-<div style="text-align:center; max-width:100%; padding: 0 1rem; box-sizing: border-box;">
+<div>
 <form action="/inspection" method="post">
     <input required autocomplete="off" class="form-control mx-auto w-auto" id="miles" name="miles" placeholder="Chilometraggio attuale" type="number">
     <input type="hidden" name="maintenance" value="0">
-    <input required autocomplete="off" class="form-control mx-auto w-auto" id="first_name" name="first_name" placeholder="First Name" type="text">
-    <input required autocomplete="off" class="form-control mx-auto w-auto" id="last_name" name="last_name" placeholder="Last Name" type="text">
-
+    <input required autocomplete="off" class="form-control mx-auto w-auto" id="first_name" name="first_name" placeholder="nome" type="text">
+    <input required autocomplete="off" class="form-control mx-auto w-auto" id="last_name" name="last_name" placeholder="cognome" type="text">
 
 <div class="accordion mb-3" id="accordion-1">
   <div class="accordion-item">
@@ -758,33 +728,33 @@
     </h2>
     <div id="collapse-1" class="accordion-collapse collapse">
       <div class="accordion-body">
-        <div style="overflow-x: auto;"><table class="table table-hover table-sm">
+        <div><table class="table checklist table-hover table-sm">
           <tbody>
             {% for ins in inspection[0:13] %}
             <tr>
               <td style="text-align:right;">{{ ins[3] }}</td>
-               <td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
-<td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td>>
-              <td><input class="form-control" name="{{ ins[1] }}" type="text" style="visibility:hidden"></td>
+              <td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
+              <td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td>
+              <td><input class="form-control" name="{{ ins[1] }}" type="text" style="visibility:hidden" style="display:none"></td>
             </tr>
             {% endfor %}
           </tbody>
         </table></div>
       </div>
     </div>
-    </div>
-    </div>
-        {% for i in range(13, 179) %}
-            <input type="hidden" name="{{ inspection[i][0] }}" value="1">
-        {% endfor %}
+  </div>
+</div>
 
-        <input type="hidden" name="date" value="{{ date }}">
-    <p><strong>Data e ora dell'ispezione:</strong> {{ date }}</p>
-            <button type="button" class="btn btn-warning mb-3" id="check-all-btn">Check all OK (for testing)</button>
+{% for i in range(13, 179) %}
+    <input type="hidden" name="{{ inspection[i][0] }}" value="1">
+{% endfor %}
 
-        <button name="vehicle" class="btn btn-danger" type="submit" value="{{ v["v_id"] }}">Aggiungi Ispezione</button>
-    </form>
-
+<input type="hidden" name="date" value="{{ date }}">
+<p><strong>Data e ora dell'ispezione:</strong> {{ date }}</p>
+<button type="button" class="btn btn-warning mb-3" id="check-all-btn">Check all OK (for testing)</button>
+<button name="vehicle" class="btn btn-danger" type="submit" value="{{ v["v_id"] }}">Aggiungi Ispezione</button>
+</form>
+</div>
 
 {% endif %}
 <script>
