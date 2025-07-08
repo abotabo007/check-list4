@@ -9,20 +9,16 @@
       <thead class="table-danger">
         <tr>
           <th>ID</th>
-          <th>Prossimo cambio olio</th>
           <th>Ultima ispezione (km)</th>
           <th>Ultima ispezione (data)</th>
-          <th>Prossima data stimata</th>
         </tr>
       </thead>
       <tbody>
         {% for v, i in vehicles.items() %}
           <tr onclick="window.location='/vehicles?vehicle={{ v }}';" style="cursor:pointer; {% if i[0][0] < i[0][1] %}background-color:#ffd6d6;{% endif %}">
             <td>{{ v }}</td>
-            <td>{{ i[0][0] }}</td>
             <td>{{ i[0][1] }}</td>
             <td>{{ i[0][2] }}</td>
-            <td>{{ i[0][3] }}</td>
           </tr>
         {% endfor %}
       </tbody>

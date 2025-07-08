@@ -1,9 +1,10 @@
-<!-- CONTENUTO FIN QUI OMESSO PER BREVITÀ -->
-
-<!-- index.html -->
 {% extends "layout.html" %}
 {% block title %}Gestione Ispezioni e Manutenzione{% endblock %}
-{% block head %}<script src="./static/script.js"></script>{% endblock %}
+{% block head %}
+  <script src="./static/script.js"></script>
+  <link rel="stylesheet" href="./static/styles.css">
+  <link rel="stylesheet" href="./static/responsive_table.css">
+{% endblock %}
 {% block main %}
 {% if not session["user_id"] %}
   <div class="text-center">
@@ -14,77 +15,81 @@
   <div class="container text-center">
     {% if users != [] %}
     <h2 class="text-danger">Utenti</h2>
-    <table class="table table-hover table-bordered">
-      <thead class="table-danger">
-        <tr>
-          <th>Utente</th>
-          <th>Email</th>
-          <th>Ruolo</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for i in range(0, users | length) %}
-        <tr>
-          <td>{{ users[i]["username"] }}</td>
-          <td>{{ users[i]["email"] }}</td>
-          <td>{{ users[i]["role"] }}</td>
-          <td>
-            <form action="/edit-user" method="get">
-              <button name="user" class="btn btn-sm btn-danger" type="submit" value="{{ users[i]["username"] }}" {% if users[i]["role"] == "owner" %}disabled{% endif %}>Modifica</button>
-            </form>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    {% endif %}
-
-    <h2 class="text-danger mt-5">Veicoli</h2>
-    <table class="table table-hover table-bordered">
-      {% if vehicles == [] %}
-        <thead><tr><th>Nessun veicolo presente</th></tr></thead>
-      {% else %}
+    <div class="table-responsive">
+      <table class="table table-hover table-bordered">
         <thead class="table-danger">
           <tr>
-            <th>Anno</th>
-            <th>Marca</th>
-            <th>Modello</th>
-            <th>ID</th>
-            <th>Targa</th>
-            <th>VIN</th>
-            <th colspan="3">Azioni</th>
+            <th>Utente</th>
+            <th>Email</th>
+            <th>Ruolo</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
-          {% for i in range(0, vehicles | length) %}
+          {% for i in range(0, users | length) %}
           <tr>
-            <td>{{ vehicles[i]["year"] }}</td>
-            <td>{{ vehicles[i]["make"] }}</td>
-            <td>{{ vehicles[i]["model"] }}</td>
-            <td>{{ vehicles[i]["number"] }}</td>
-            <td>{{ vehicles[i]["tag"] }}</td>
-            <td>{{ vehicles[i]["vin"] }}</td>
-            <td>
-              <form action="/edit-vehicle" method="get">
-                <button name="vehicle" class="btn btn-sm btn-danger" type="submit" value="{{ vehicles[i]["number"] }}">Modifica</button>
-              </form>
-            </td>
-            <td>
-              <form action="/inspection" method="get">
-                <button name="vehicle" class="btn btn-sm btn-danger" type="submit" value="{{ vehicles[i]["number"] }}">Ispeziona</button>
-              </form>
-            </td>
-            <td>
-              <form action="/vehicles" method="get">
-                <button name="vehicle" class="btn btn-sm btn-danger" type="submit" value="{{ vehicles[i]["number"] }}">Visualizza</button>
+            <td data-label="Utente">{{ users[i]["username"] }}</td>
+            <td data-label="Email">{{ users[i]["email"] }}</td>
+            <td data-label="Ruolo">{{ users[i]["role"] }}</td>
+            <td data-label="Modifica">
+              <form action="/edit-user" method="get">
+                <button name="user" class="btn btn-sm btn-danger" type="submit" value="{{ users[i]["username"] }}" {% if users[i]["role"] == "owner" %}disabled{% endif %}>Modifica</button>
               </form>
             </td>
           </tr>
           {% endfor %}
         </tbody>
-      {% endif %}
-    </table>
+      </table>
+    </div>
+    {% endif %}
+
+    <h2 class="text-danger mt-5">Veicoli</h2>
+    <div class="table-responsive">
+      <table class="table table-hover table-bordered">
+        {% if vehicles == [] %}
+          <thead><tr><th>Nessun veicolo presente</th></tr></thead>
+        {% else %}
+          <thead class="table-danger">
+            <tr>
+              <th>Anno</th>
+              <th>Marca</th>
+              <th>Modello</th>
+              <th>ID</th>
+              <th>Targa</th>
+              <th>VIN</th>
+              <th colspan="3">Azioni</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in range(0, vehicles | length) %}
+            <tr>
+              <td data-label="Anno">{{ vehicles[i]["year"] }}</td>
+              <td data-label="Marca">{{ vehicles[i]["make"] }}</td>
+              <td data-label="Modello">{{ vehicles[i]["model"] }}</td>
+              <td data-label="ID">{{ vehicles[i]["number"] }}</td>
+              <td data-label="Targa">{{ vehicles[i]["tag"] }}</td>
+              <td data-label="VIN">{{ vehicles[i]["vin"] }}</td>
+              <td data-label="Modifica">
+                <form action="/edit-vehicle" method="get">
+                  <button name="vehicle" class="btn btn-sm btn-danger" type="submit" value="{{ vehicles[i]["number"] }}">Modifica</button>
+                </form>
+              </td>
+              <td data-label="Ispeziona">
+                <form action="/inspection" method="get">
+                  <button name="vehicle" class="btn btn-sm btn-danger" type="submit" value="{{ vehicles[i]["number"] }}">Ispeziona</button>
+                </form>
+              </td>
+              <td data-label="Visualizza">
+                <form action="/vehicles" method="get">
+                  <button name="vehicle" class="btn btn-sm btn-danger" type="submit" value="{{ vehicles[i]["number"] }}">Visualizza</button>
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        {% endif %}
+      </table>
+    </div>
   </div>
 {% endif %}
 {% endblock %}

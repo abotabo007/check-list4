@@ -1,27 +1,78 @@
+/* Responsività: impila righe della tabella su mobile */
+@media (max-width: 768px) {
+  .table thead {
+    display: none;
+  }
+  .table tbody tr {
+    display: block;
+    border: 1px solid #ddd;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+    border-radius: 8px;
+    background: #fff;
+    padding: 0.5rem;
+  }
+  .table tbody td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border: none;
+    position: relative;
+    font-size: 1em;
+  }
+  .table tbody td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    color: #d9534f;
+    flex-basis: 50%;
+    text-align: left;
+    padding-right: 1em;
+  }
+}
 
+/* Stile generale */
 body {
-    background-color: #f8f9fa;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f9fa;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 h2 {
-    font-weight: 600;
+  font-weight: 600;
 }
 
 .accordion-button::after {
-    transform: scale(1.2);
+  transform: scale(1.2);
 }
 
 .list-group-item {
-    border: none;
-    border-bottom: 1px solid #e0e0e0;
+  border: none;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .accordion-item {
-    border: 1px solid #dee2e6;
-    border-radius: 6px;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
 }
 
 footer {
-    background: #f1f1f1;
+  background: #f1f1f1;
+}
+
+.accordion-button::after {
+  display: none !important;
+}
+
+/* Rimozione scroll orizzontale: NON forziamo larghezza minima */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Miglioramento per mobile: padding e font-size minori */
+@media (max-width: 576px) {
+  th, td {
+    padding: 0.3rem 0.5rem;
+    font-size: 0.95em;
+  }
 }

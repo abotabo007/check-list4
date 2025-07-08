@@ -43,12 +43,12 @@ def create_app(test_config=None):
         response.headers["Expires"] = 0
         response.headers["Pragma"] = "no-cache"
         return response
-    
+
     # a simple page that says hello
     @app.route('/hello')
     def hello():
         return 'Hello, World!'
-    
+
     from . import db
     db.init_app(app)
 

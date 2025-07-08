@@ -10,13 +10,14 @@
     <h2 class="accordion-header" id="heading{{ loop.index }}">
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
               data-bs-target="#collapse{{ loop.index }}">
-        🗓️ {{ ins.date }} • 👤 {{ ins.first_name }} {{ ins.last_name }} • 🚗 Veicolo: {{ ins.vin }}
+        🗓️ {{ ins.date }} • 👤 {{ ins.first_name }} {{ ins.last_name }} • 🚗 Veicolo: {{ ins.number }}
       </button>
     </h2>
     <div id="collapse{{ loop.index }}" class="accordion-collapse collapse" data-bs-parent="#inspectionsAccordion">
       <div class="accordion-body">
         <div class="row mb-3">
           <div class="col-md-6"><strong>Username:</strong> {{ ins.username }}</div>
+           <div class="col-md-6"><strong>VIN (debug):</strong> {{ ins.number }}</div>
           <div class="col-md-6"><strong>Chilometraggio:</strong> {{ ins.miles }}</div>
           <div class="col-md-6"><strong>Data:</strong> {{ ins.date }}</div>
         </div>
@@ -24,12 +25,12 @@
         <strong>Checklist:</strong>
         <div class="row row-cols-1 row-cols-md-2">
           <ul class="list-group list-group-flush">
-            {% set show_all = ins.vin == 6 or ins.vin == 'mezzo_1' %}
+            {% set show_all = ins.number == 'sads' or ins.number == 'mezzo_1' %}
             {% if show_all %}
               {% for pair in ins.checklist_items %}
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                   <span><strong>{{ pair[0].replace('_', ' ').title() }}</strong></span>
-                  <span class="badge rounded-pill 
+                  <span class="badge rounded-pill
                     {% if pair[1] == 1 %}bg-success
                     {% elif pair[1] == 0 %}bg-danger
                     {% else %}bg-secondary{% endif %}">
@@ -41,7 +42,7 @@
               {% for pair in ins.checklist_items[:13] %}
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                   <span><strong>{{ pair[0].replace('_', ' ').title() }}</strong></span>
-                  <span class="badge rounded-pill 
+                  <span class="badge rounded-pill
                     {% if pair[1] == 1 %}bg-success
                     {% elif pair[1] == 0 %}bg-danger
                     {% else %}bg-secondary{% endif %}">
@@ -53,9 +54,6 @@
           </ul>
         </div>
         {% if not show_all and ins.checklist_items|length > 13 %}
-          <div class="alert alert-warning mt-2 mb-0 p-2 small">
-            ⚠️ Checklist abbreviata: mostrati solo i primi 13 elementi.
-          </div>
         {% endif %}
         <div class="mt-3">
           <a href="{{ url_for('views.export_inspection', inspection_id=ins.i_id) }}" class="btn btn-sm btn-outline-primary">

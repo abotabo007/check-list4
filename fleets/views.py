@@ -5,7 +5,10 @@ from io import BytesIO
 from docx import Document
 from fleets.db import get_db
 from fleets.helpers import permissions_required
-import datetime 
+from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
+
+
 
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for, jsonify
@@ -15,6 +18,7 @@ from fleets.helpers import feedback, login_required, check_password, as_dict, pe
 from fleets.dictionaries import c1
 
 from fleets.db import get_db
+
 
 MAX_INSPECTIONS = 8
 
@@ -52,7 +56,7 @@ def index():
         vehicles = as_dict(db.execute("SELECT * FROM vehicles WHERE c_id = ? ORDER BY (number + 0)", [session["c_id"]]).fetchall())
     else:
         return redirect(url_for('.logout'))
-    
+
 
     # Render index.html with the values from DB
     return render_template("index.html", user=user, users=users, vehicles=vehicles)
@@ -270,12 +274,12 @@ def add_user():
             return feedback('Database: Error adding user, contact support', "add-user.html", to_dict(request.form), "u")
         else:
             # Redirect to home
-            
+
             flash("User added!")
             return redirect(url_for(".index"))
 
 @bp.route("/inspection", methods=["GET", "POST"])
-@login_required
+# @login_required
 def inspection():
     """Creates an inspection"""
     # If request is GET render the page
@@ -285,7 +289,7 @@ def inspection():
             # Get all the company vehicles from DB
             db = get_db()
             vehicles = as_dict(db.execute("SELECT * FROM vehicles WHERE c_id = ? ORDER BY number", [session.get("c_id")]).fetchall())
-            
+
 
             # If only one vehicle just go to inspect that one, otherwise render template to select it
             if len(vehicles) == 1:
@@ -302,17 +306,17 @@ def inspection():
 
             # If no such vehicle redirect to inspection
             if len(v) != 1:
-                
+
                 flash('Wrong parameter', 'error')
                 return redirect(url_for(".inspection"))
 
             # Get next oil change from last inspection
             oil = db.execute("SELECT next_oil FROM inspections WHERE v_id = ? ORDER BY date DESC", [v[0]["v_id"]]).fetchone()
-            
+
 
             # pass the info to render the inspection for that vehicle
             return render_template("inspection.html", inspection=c1, vehicle=request.args.get("vehicle"),
-                                        v=v[0], oil=oil, date=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+                                        v=v[0], oil=oil, date = datetime.now(ZoneInfo("Europe/Rome")).strftime('%d/%m/%Y %H:%M:%S'))
 
     # If request is post (Meaning: user sumbited an inspection)
     else:
@@ -325,22 +329,22 @@ def inspection():
         else:
             flash('Something went wrong with that request')
             return redirect(url_for('.inspection'))
-        
+
 
         # Check that the important inputs have data, if not, render an apology
         checks = check_inputs(request.form, ["vehicle", "miles", "maintenance", "first_name", "last_name"], False)
         if checks[0]:
             return feedback("Must provide " + checks[1].capitalize(), "inspection.html", to_dict(request.form), "i", 400,
                             inspection=c1, vehicle=v[0]["number"], v=v[0], oil=request.form.get("maintenance"),
-                            date=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+                            date = datetime.now(ZoneInfo("Europe/Rome")).strftime('%d/%m/%Y %H:%M:%S'))
 
         # Check inspection is complete
         for c in c1:
             check = check_inputs(request.form, [c[0]], False)
             if check[0]:
-                return feedback("Must provide value for: " + c[3].capitalize(), "inspection.html", to_dict(request.form), "i", 400, 
+                return feedback("Must provide value for: " + c[3].capitalize(), "inspection.html", to_dict(request.form), "i", 400,
                                 inspection=c1, vehicle=v[0]["number"], v=v[0], oil=request.form.get("maintenance"),
-                                date=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+                                date = datetime.now(ZoneInfo("Europe/Rome")).strftime('%d/%m/%Y %H:%M:%S'))
 
         # Create the DB query dinamically depending on the data sumbited
         # query will always start the same way
@@ -356,7 +360,7 @@ def inspection():
             request.form.get("vehicle"),
             request.form.get("miles"),
             request.form.get("maintenance"),
-            datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            datetime.now(ZoneInfo("Europe/Rome")).strftime('%Y-%m-%d %H:%M:%S'),
             request.form.get("first_name"),
             request.form.get("last_name"),
 ]
@@ -387,15 +391,15 @@ def inspection():
         except db.IntegrityError:
             # If there was an error flash the user
             print(db.IntegrityError)
-            return feedback('Database: Error adding inspection, contact support', "inspection.html", to_dict(request.form), "i", 400, 
+            return feedback('Database: Error adding inspection, contact support', "inspection.html", to_dict(request.form), "i", 400,
                                 inspection=c1, vehicle=v[0]["number"], v=v[0], oil=request.form.get("maintenance"),
-                                date=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-)
+                                date = datetime.now(ZoneInfo("Europe/Rome")).strftime('%d/%m/%Y %H:%M:%S'))
         else:
             # Confirm to the user and redirect to home
-            
+
             flash("Inspection added!")
             return redirect(url_for(".index"))
+
 
 @bp.route("/password", methods=["GET", "POST"])
 @login_required
@@ -410,7 +414,7 @@ def password():
         # query DB for user
         db = get_db()
         user = as_dict(db.execute("SELECT * FROM users WHERE u_id = ?", [session.get("user_id")]).fetchall())
-        
+
 
         # Check that all inputs have data, if not, render an apology
         checks = check_inputs(request.form)
@@ -439,9 +443,10 @@ def password():
             # If there was an error flash the user
             print(db.IntegrityError)
             return feedback('Database: Error changing password, contact support', "password.html")
+
         else:
             # Flask confirmation and redirect to home
-            
+
             flash("Password changed!")
             return redirect(url_for(".index"))
 
@@ -457,7 +462,7 @@ def edit_vehicle():
             # Get all the company vehicles from DB
             db = get_db()
             vehicles = as_dict(db.execute("SELECT * FROM vehicles WHERE c_id = ? ORDER BY (number + 0)", [session.get("c_id")]).fetchall())
-            
+
             # If only one vehicle just go to edit that one, otherwise render template to select it
             if len(vehicles) == 1:
                 return redirect(url_for(".edit_vehicle") + "?vehicle=" + str(vehicles[0]["number"]))
@@ -470,7 +475,7 @@ def edit_vehicle():
             db = get_db()
             v = as_dict(db.execute("SELECT * FROM vehicles WHERE number = ? AND c_id = ?",
                                     [request.args.get("vehicle"), session.get("c_id")]).fetchall())
-            
+
 
             # If no such vehicle redirect to edit-vehicle otherwise pass the info to render the edit template for that vehicle
             if len(v) == 0:
@@ -534,7 +539,7 @@ def edit_vehicle():
                                 to_dict(request.form), "v", 400, vehicle=request.form.get("vehicle"))
         else:
             # Flash the user the confimation and redirect to home
-            
+
             flash('Database Updated!')
             return redirect(url_for(".index"))
 
@@ -551,7 +556,7 @@ def edit_user():
             # Get all the company users from DB except for the owner
             db = get_db()
             users = as_dict(db.execute('''SELECT * FROM users WHERE c_id = ? AND role != "owner"''', [session.get("c_id")]).fetchall())
-            
+
             # If only one user just go to edit that one, otherwise render template to select it
             if len(users) == 1:
                 return redirect(url_for(".edit_user") + "?user=" + str(users[0]["username"]))
@@ -565,7 +570,7 @@ def edit_user():
             u = as_dict(db.execute("SELECT * FROM users WHERE username = ? AND c_id = ?", [request.args.get("user"), session.get("c_id")]).fetchall())
             c = as_dict(db.execute("SELECT * FROM companys WHERE id = ?", [session.get("c_id")]).fetchall())
             users = as_dict(db.execute('''SELECT * FROM users WHERE c_id = ? AND role != "owner"''', [session.get("c_id")]).fetchall())
-            
+
 
             # If trying to edit owner return an apology
             if c[0]["owner"] == request.args.get("user"):
@@ -584,7 +589,7 @@ def edit_user():
         u = as_dict(db.execute("SELECT * FROM users WHERE u_id = ?", [request.form.get("u")]).fetchall())
         others = as_dict(db.execute("SELECT * FROM users WHERE u_id != ? AND c_id = ?",
                             [request.form.get("u"), session.get("c_id")]).fetchall())
-        
+
 
         # Check that all the inputs have data, if not, render an apology
         checks = check_inputs(request.form)
@@ -602,7 +607,7 @@ def edit_user():
             if request.form.get("username") == other["username"] or request.form.get("email") == other["email"]:
                 return feedback("Username/email already in company database", "edit-user.html", to_dict(request.form), 'u',
                                     400, user=request.form.get("u"))
-        
+
         # If trying to edit the role of the owner return an apology
         if u[0]["role"] == "owner" and request.form.get("role") != "owner":
             return feedback("Can't change role of the owner", "edit-user.html", to_dict(request.form), 'u',
@@ -642,7 +647,7 @@ def edit_user():
                                 400, user=request.form.get("u"))
         else:
             # Redirect to home
-            
+
             flash('Database Updated!')
             return redirect(url_for(".index"))
 
@@ -662,7 +667,7 @@ def vehicles():
 
         # If vehicle submited not in database redirect to vehicles
         if len(vehicle) != 1:
-            
+
             flash("Select a vehicle from the list", 'error')
             return redirect(url_for("views.vehicles"))
 
@@ -674,7 +679,7 @@ def vehicles():
         inspections = as_dict(db.execute('''SELECT * FROM inspections, users WHERE inspections.c_id = ? AND inspections.v_id = ?
                                             AND inspections.u_id = users.u_id ORDER BY inspections.date DESC LIMIT ?''',
                                             [session.get("c_id"), vehicle[0]["v_id"], MAX_INSPECTIONS]).fetchall())
-        
+
 
         # Create an array called inspection with this structure:
         # [Issue description, Issue name, Date, User (that made the inspection)] for every issue and inspection
@@ -713,7 +718,7 @@ def vehicles():
             db = get_db()
             vehicles = as_dict(db.execute("SELECT * FROM vehicles WHERE c_id = ? ORDER BY (number + 0)", [session.get("c_id")]).fetchall())
             inspections = as_dict(db.execute("SELECT * FROM inspections WHERE c_id = ? ORDER BY date DESC", [session.get("c_id")]).fetchall())
-            
+
 
             # Fancy way of creating a dictionary with the vehicles as keys and a list of inspections as values
             v = {ve["number"]:[[i["next_oil"], i["miles"], i["date"]] for i in inspections if i["v_id"] == ve["v_id"]] for ve in vehicles}
@@ -731,7 +736,7 @@ def vehicles():
                     dates = []
                     j = 0
                     # Need to convert dates to numbers to calculate best fit. Milliseconds from 01/01/1970 seem appropiate
-                    d2 = datetime.datetime.strptime("1970-01-01", '%Y-%m-%d')
+                    d2 = datetime.strptime("1970-01-01", '%Y-%m-%d')
                     for array in i:
                         if j > MAX_INSPECTIONS:
                             break
@@ -740,11 +745,11 @@ def vehicles():
                         # Append the mileage to the miles array
                         miles.append(array[1])
                         # Append the date in milliseconds from 1970 to the dates array
-                        d1 = datetime.datetime.strptime(array[2], '%Y-%m-%d %H:%M:%S')
-                        dates.append((d1 - d2)/datetime.timedelta(milliseconds=1))
+                        d1 = datetime.strptime(array[2], '%Y-%m-%d %H:%M:%S')
+                        dates.append((d1 - d2)/timedelta(milliseconds=1))
                         j += 1
                     # Calculate projection
-                    next_oil = d2 + datetime.timedelta(milliseconds=best_fit(dates, miles, miles_oil))
+                    next_oil = d2 + timedelta(milliseconds=best_fit(dates, miles, miles_oil))
                     # Append calculation in date format
                     i[0].append(next_oil.strftime('%Y-%m-%d'))
                 else:
@@ -768,7 +773,7 @@ def vehicles():
         db = get_db()
         inspections = as_dict(db.execute("SELECT v_id, date, miles, next_oil FROM inspections WHERE c_id = ? ORDER BY date DESC", [session.get("c_id")]).fetchall())
         vehicles = as_dict(db.execute("SELECT * FROM vehicles WHERE c_id = ? ORDER BY number", [session.get("c_id")]).fetchall())
-        
+
 
         # Create the data for the graphs for all vehicles including projections
         graph_data = []
@@ -784,9 +789,9 @@ def vehicles():
                 if i["v_id"] == v["v_id"]:
                     if j > MAX_INSPECTIONS:
                         break
-                    d1 = datetime.datetime.strptime(i["date"], '%Y-%m-%d')
-                    d2 = datetime.datetime.strptime("1970-01-01", '%Y-%m-%d')
-                    d[v["number"]]["dates"].append((d1 - d2)/datetime.timedelta(milliseconds=1))
+                    d1 = datetime.strptime(i["date"], '%Y-%m-%d')
+                    d2 = datetime.strptime("1970-01-01", '%Y-%m-%d')
+                    d[v["number"]]["dates"].append((d1 - d2)/timedelta(milliseconds=1))
                     d[v["number"]]["miles"].append(i["miles"])
                     miles_oil = max(i["next_oil"], miles_oil)
                     j += 1
@@ -800,7 +805,7 @@ def vehicles():
             graph_data.append(d)
 
         return jsonify(graph_data)
-    
+
 @bp.route("/all_inspections")
 @login_required
 @permissions_required  # Only admin/owner can view all checklists
@@ -808,7 +813,7 @@ def all_inspections():
     db = get_db()
     inspections = as_dict(db.execute(
         """
-        SELECT inspections.*, users.username, users.role, vehicles.vin
+        SELECT inspections.*, users.username, users.role, vehicles.vin, vehicles.number
         FROM inspections
         LEFT JOIN users ON inspections.u_id = users.u_id
         LEFT JOIN vehicles ON inspections.v_id = vehicles.v_id
@@ -819,7 +824,6 @@ def all_inspections():
     ).fetchall())
     # inside your route
     for ins in inspections:
-        ins['vin'] = ins['v_id']  # Add this lin
         checklist_items = []
         for key, value in ins.items():
             if (
@@ -828,11 +832,11 @@ def all_inspections():
             ):
                 checklist_items.append((key, value))
         ins['checklist_items'] = checklist_items
-    
+
     return render_template(
         "all_inspections.html",
         inspections=inspections
-    )   
+    )
 @bp.route("/inspection/export/<int:inspection_id>")
 @login_required
 @permissions_required  # Only admin/owner can export checklists
@@ -841,7 +845,7 @@ def export_inspection(inspection_id):
 
     # Fetch inspection, joined user info, and VIN from vehicles
     inspection = db.execute("""
-        SELECT inspections.*, users.username, vehicles.vin
+        SELECT inspections.*, users.username, vehicles.vin, vehicles.number, vehicles.tag
         FROM inspections
         LEFT JOIN users ON inspections.u_id = users.u_id
         LEFT JOIN vehicles ON inspections.v_id = vehicles.v_id
@@ -877,7 +881,8 @@ def export_inspection(inspection_id):
     doc.add_paragraph(f"Operatore: {inspection['first_name']} {inspection['last_name']}")
     doc.add_paragraph(f"Username: {inspection['username']}")
     doc.add_paragraph(f"Data ispezione: {inspection['date']}")
-    doc.add_paragraph(f"Veicolo VIN: {inspection['vin']}")
+    doc.add_paragraph(f"Targa veicolo: {inspection['number']}")
+    doc.add_paragraph(f"Sigla veicolo: {inspection['tag']}")
     doc.add_paragraph(f"Chilometraggio: {inspection['miles']}")
     doc.add_paragraph("")
 
@@ -899,4 +904,42 @@ def export_inspection(inspection_id):
         as_attachment=True,
         download_name=filename,
         mimetype="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    )
+
+@bp.route("/vehicle/<int:vehicle_id>/qrcode")
+@login_required
+def vehicle_qrcode(vehicle_id):
+    """
+    Genera un QR code per un veicolo specifico e lo restituisce come immagine PNG.
+    L'utente deve appartenere alla stessa azienda del veicolo.
+    """
+    db = get_db()
+    # Verifica che il veicolo esista e appartenga alla company dell'utente
+    vehicle = db.execute(
+        "SELECT * FROM vehicles WHERE v_id = ? AND c_id = ?",
+        [vehicle_id, session.get("c_id")]
+    ).fetchone()
+    if not vehicle:
+        abort(404, description="Veicolo non trovato o accesso negato")
+
+    # Dati che vuoi codificare nel QR (qui un URL, personalizza se vuoi)
+    qr_data = f"{request.host_url.rstrip('/')}/inspection?vehicle={vehicle['number']}"
+
+    # Generazione QR
+    import qrcode
+    import io
+    img = qrcode.make(qr_data)
+    buf = io.BytesIO()
+    img.save(buf, format='PNG')
+    buf.seek(0)
+
+    # Nome file leggibile
+    filename = f"qrcode_vehicle_{vehicle['number'] if 'number' in vehicle.keys() else vehicle_id}.png"
+
+
+    return send_file(
+        buf,
+        mimetype='image/png',
+        as_attachment=True,
+        download_name=filename
     )
