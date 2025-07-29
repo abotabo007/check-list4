@@ -290,7 +290,11 @@ def inspection():
         if user_id is None:
             user_id = 0  # valore di default per utente anonimo
         # ✅ Modifica indispensabile: usa c_id di default se non loggato
+<<<<<<< HEAD
         c_id = session.get("c_id", 1)   
+=======
+        c_id = session.get("c_id", 1)
+>>>>>>> 8b544fb (quasi)
 
         # If vehicle is not in get request
         if not request.args.get("vehicle"):
@@ -356,7 +360,11 @@ def inspection():
         values = "(?, ?, ?, ?, ?, ?, ?, ?"
         vars = [
             c_id,
+<<<<<<< HEAD
             user_id, 
+=======
+            user_id,
+>>>>>>> 8b544fb (quasi)
             request.form.get("vehicle"),
             request.form.get("miles"),
             request.form.get("maintenance"),
@@ -867,7 +875,7 @@ def export_inspection(inspection_id):
 
     # SLICE checklist if ambulance
     if inspection['vin'] != 'ambulanza' and inspection['vin'] != 'mezzo_1':
-        checklist = checklist[:13]
+        checklist = checklist[:24]
 
     doc = Document()
     doc.add_heading("Checklist Ispezione", level=1)
@@ -883,6 +891,8 @@ def export_inspection(inspection_id):
 
     doc.add_heading("Risposte", level=2)
     for key, value in checklist:
+        if key in ['number', 'tag']:
+            continue
         risposta = "OK" if value == 1 else "Non OK" if value == 0 else "N/D"
         doc.add_paragraph(f"{key.replace('_', ' ').title()}: {risposta}", style="List Bullet")
 

@@ -25,9 +25,9 @@
         <strong>Checklist:</strong>
         <div class="row row-cols-1 row-cols-md-2">
           <ul class="list-group list-group-flush">
-            {% set show_all = ins.number == 'sads' or ins.number == 'mezzo_1' %}
+            {% set show_all = ins.number|string == '151201' or ins.number == '151208' or ins.number == '151203' or ins.number == '151209' or ins.number == '151205' or ins.number == '151210' %}
             {% if show_all %}
-              {% for pair in ins.checklist_items %}
+              {% for pair in ins.checklist_items if pair[0] not in ['number', 'vin', 'date', 'username', 'miles', 'first_name', 'last_name'] %}
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                   <span><strong>{{ pair[0].replace('_', ' ').title() }}</strong></span>
                   <span class="badge rounded-pill
@@ -39,7 +39,7 @@
                 </li>
               {% endfor %}
             {% else %}
-              {% for pair in ins.checklist_items[:13] %}
+              {% for pair in ins.checklist_items[0:24] %}
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                   <span><strong>{{ pair[0].replace('_', ' ').title() }}</strong></span>
                   <span class="badge rounded-pill

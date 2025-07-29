@@ -16,7 +16,7 @@
     </div>
     <button class="btn btn-danger" type="submit">Ispeziona</button>
 </form>
-{% elif v is defined and (v["vin"] == "ambulanza" or v["vin"] == "mezzo_1") %}
+{% elif v is defined and (v["vin"] == "ambulanza" or v["vin"] == "ambulanza " or v["vin"] == "ambulanza  " or v["vin"] == "ambulanza   " or v["vin"] == "ambulanza    " or v["vin"] == "ambulanza     ") %}
 <h4>Ispezione veicolo {{ v["number"] }}: {{ v["year"] }} {{ v["make"] }} {{ v["model"] }}</h4>
 <div >
 <form action="/inspection" method="post">
@@ -30,14 +30,14 @@
   <div class="accordion-item">
     <h2 class="accordion-header" id="heading-1">
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-1">
-        🧾 Vano Guida
+        🧾 VISIVO ESTERNO E INTERNO
       </button>
     </h2>
     <div id="collapse-1" class="accordion-collapse collapse">
       <div class="accordion-body">
         <div ><table class="table checklist table-hover table-sm">
           <tbody>
-            {% for ins in inspection[0:13] %}
+            {% for ins in inspection[0:4] %}
             <tr>
               <td >{{ ins[3] }}</td>
                <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
@@ -55,14 +55,14 @@
   <div class="accordion-item">
     <h2 class="accordion-header" id="heading-2">
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-2">
-        🦺 Set Sicurezza
+        🚨 STRUMENTI DI SEGNALAZIONE, COMANDO E SICUREZZA
       </button>
     </h2>
     <div id="collapse-2" class="accordion-collapse collapse">
       <div class="accordion-body">
         <div ><table class="table checklist table-hover table-sm">
           <tbody>
-            {% for ins in inspection[13:21] %}
+            {% for ins in inspection[4:8] %}
             <tr>
               <td >{{ ins[3] }}</td>
                <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
@@ -80,14 +80,14 @@
   <div class="accordion-item">
     <h2 class="accordion-header" id="heading-3">
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-3">
-        🧤 Guanti
+        📄 DOCUMENTAZIONE E DOTAZIONE DI BORDO
       </button>
     </h2>
     <div id="collapse-3" class="accordion-collapse collapse">
       <div class="accordion-body">
         <div ><table class="table checklist table-hover table-sm">
           <tbody>
-            {% for ins in inspection[21:25] %}
+            {% for ins in inspection[8:18] %}
             <tr>
               <td >{{ ins[3] }}</td>
                <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
@@ -105,14 +105,14 @@
   <div class="accordion-item">
     <h2 class="accordion-header" id="heading-4">
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-4">
-        🏥 Vano Sanitario
+        🛠️ VANO MOTORE
       </button>
     </h2>
     <div id="collapse-4" class="accordion-collapse collapse">
       <div class="accordion-body">
         <div ><table class="table checklist table-hover table-sm">
           <tbody>
-            {% for ins in inspection[25:55] %}
+            {% for ins in inspection[18:24] %}
             <tr>
               <td >{{ ins[3] }}</td>
                <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
@@ -130,14 +130,14 @@
   <div class="accordion-item">
     <h2 class="accordion-header" id="heading-5">
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-5">
-        ⚡ D.A.E. (Defibrillatore)
+         🏥 VANO SANITARIO
       </button>
     </h2>
     <div id="collapse-5" class="accordion-collapse collapse">
       <div class="accordion-body">
         <div ><table class="table checklist table-hover table-sm">
           <tbody>
-            {% for ins in inspection[55:60] %}
+            {% for ins in inspection[24:38] %}
             <tr>
               <td >{{ ins[3] }}</td>
                <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
@@ -150,19 +150,18 @@
     </div>
   </div>
 </div>
-
 <div class="accordion mb-3" id="accordion-6">
   <div class="accordion-item">
     <h2 class="accordion-header" id="heading-6">
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-6">
-        ⚙️ Strumenti Elettromedicali
+        🫁 OSSIGENOTERAPIA
       </button>
     </h2>
     <div id="collapse-6" class="accordion-collapse collapse">
       <div class="accordion-body">
         <div ><table class="table checklist table-hover table-sm">
           <tbody>
-            {% for ins in inspection[60:65] %}
+            {% for ins in inspection[38:45] %}
             <tr>
               <td >{{ ins[3] }}</td>
                <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
@@ -180,14 +179,14 @@
   <div class="accordion-item">
     <h2 class="accordion-header" id="heading-7">
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-7">
-        🛌 Presidi
+        🧴 VANO FISIOLOGICHE
       </button>
     </h2>
     <div id="collapse-7" class="accordion-collapse collapse">
       <div class="accordion-body">
         <div ><table class="table checklist table-hover table-sm">
           <tbody>
-            {% for ins in inspection[65:84] %}
+            {% for ins in inspection[45:46] %}
             <tr>
               <td >{{ ins[3] }}</td>
                <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
@@ -205,14 +204,14 @@
   <div class="accordion-item">
     <h2 class="accordion-header" id="heading-8">
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-8">
-        🟦 Asse Spinale Adulti
+        🗄️ CASSETTI
       </button>
     </h2>
     <div id="collapse-8" class="accordion-collapse collapse">
       <div class="accordion-body">
         <div ><table class="table checklist table-hover table-sm">
           <tbody>
-            {% for ins in inspection[84:89] %}
+            {% for ins in inspection[46:58] %}
             <tr>
               <td >{{ ins[3] }}</td>
                <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
@@ -230,14 +229,14 @@
   <div class="accordion-item">
     <h2 class="accordion-header" id="heading-9">
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-9">
-        🟩 Asse Spinale Pediatrica
+        📦 VANO ALTRO MATERIALE
       </button>
     </h2>
     <div id="collapse-9" class="accordion-collapse collapse">
       <div class="accordion-body">
         <div ><table class="table checklist table-hover table-sm">
           <tbody>
-            {% for ins in inspection[89:94] %}
+            {% for ins in inspection[58:63] %}
             <tr>
               <td >{{ ins[3] }}</td>
                <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
@@ -255,14 +254,14 @@
   <div class="accordion-item">
     <h2 class="accordion-header" id="heading-10">
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-10">
-        🟨 Steccobende
+        🧼 VANO PULIZA E INFETTIVI
       </button>
     </h2>
     <div id="collapse-10" class="accordion-collapse collapse">
       <div class="accordion-body">
         <div ><table class="table checklist table-hover table-sm">
           <tbody>
-            {% for ins in inspection[94:97] %}
+            {% for ins in inspection[63:66] %}
             <tr>
               <td >{{ ins[3] }}</td>
                <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
@@ -276,18 +275,19 @@
   </div>
 </div>
 
+
 <div class="accordion mb-3" id="accordion-11">
   <div class="accordion-item">
     <h2 class="accordion-header" id="heading-11">
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-11">
-        💉 Sondini Aspiratore
+        🧤 GUANTI
       </button>
     </h2>
     <div id="collapse-11" class="accordion-collapse collapse">
       <div class="accordion-body">
         <div ><table class="table checklist table-hover table-sm">
           <tbody>
-            {% for ins in inspection[97:103] %}
+            {% for ins in inspection[66:70] %}
             <tr>
               <td >{{ ins[3] }}</td>
                <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
@@ -305,14 +305,14 @@
   <div class="accordion-item">
     <h2 class="accordion-header" id="heading-12">
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-12">
-        😷 Maschere Ossigeno
+        💡 DISPOSITIVI ELETTROMEDICALI (CONTROLLARE FUNZIONAMENTO)
       </button>
     </h2>
     <div id="collapse-12" class="accordion-collapse collapse">
       <div class="accordion-body">
         <div ><table class="table checklist table-hover table-sm">
           <tbody>
-            {% for ins in inspection[103:110] %}
+            {% for ins in inspection[70:74] %}
             <tr>
               <td >{{ ins[3] }}</td>
                <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
@@ -326,18 +326,19 @@
   </div>
 </div>
 
+
 <div class="accordion mb-3" id="accordion-13">
   <div class="accordion-item">
     <h2 class="accordion-header" id="heading-13">
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-13">
-        🧼 Igiene del Mezzo
+        🎒 VANO KIT
       </button>
     </h2>
     <div id="collapse-13" class="accordion-collapse collapse">
       <div class="accordion-body">
         <div ><table class="table checklist table-hover table-sm">
           <tbody>
-            {% for ins in inspection[110:117] %}
+            {% for ins in inspection[74:79] %}
             <tr>
               <td >{{ ins[3] }}</td>
                <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
@@ -355,14 +356,14 @@
   <div class="accordion-item">
     <h2 class="accordion-header" id="heading-14">
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-14">
-        🎒 Zaino Pediatrico - Sacca Parto Gialla
+        🧩 ALTRO
       </button>
     </h2>
     <div id="collapse-14" class="accordion-collapse collapse">
       <div class="accordion-body">
         <div ><table class="table checklist table-hover table-sm">
           <tbody>
-            {% for ins in inspection[117:123] %}
+            {% for ins in inspection[79:86] %}
             <tr>
               <td >{{ ins[3] }}</td>
                <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
@@ -376,18 +377,19 @@
   </div>
 </div>
 
+
 <div class="accordion mb-3" id="accordion-15">
   <div class="accordion-item">
     <h2 class="accordion-header" id="heading-15">
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-15">
-        🎒 Sacca Elett. Ped. Rossa
+        🧰 ZAINO 1
       </button>
     </h2>
     <div id="collapse-15" class="accordion-collapse collapse">
       <div class="accordion-body">
         <div ><table class="table checklist table-hover table-sm">
           <tbody>
-            {% for ins in inspection[123:130] %}
+            {% for ins in inspection[86:93] %}
             <tr>
               <td >{{ ins[3] }}</td>
                <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
@@ -405,14 +407,14 @@
   <div class="accordion-item">
     <h2 class="accordion-header" id="heading-16">
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-16">
-        🎒 Sacca Ventilazione Pediatrica Blu
+        🎒 ZAINO 2
       </button>
     </h2>
     <div id="collapse-16" class="accordion-collapse collapse">
       <div class="accordion-body">
         <div ><table class="table checklist table-hover table-sm">
           <tbody>
-            {% for ins in inspection[130:140] %}
+            {% for ins in inspection[93:100] %}
             <tr>
               <td >{{ ins[3] }}</td>
                <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
@@ -426,6 +428,7 @@
   </div>
 </div>
 
+<<<<<<< HEAD
 <div class="accordion mb-3" id="accordion-17">
   <div class="accordion-item">
     <h2 class="accordion-header" id="heading-17">
@@ -703,6 +706,8 @@
   </div>
 </div>
 
+=======
+>>>>>>> 8b544fb (quasi)
 <input type="hidden" name="date" value="{{ date }}">
 <p><strong>Data e ora dell'ispezione:</strong> {{ date }}</p>
 <button type="button" class="btn btn-warning mb-3" id="check-all-btn">Check all OK (for testing)</button>
@@ -723,19 +728,58 @@
   <div class="accordion-item">
     <h2 class="accordion-header" id="heading-1">
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-1">
-        🧾 Vano Guida
+        🧾 VISIVO ESTERNO E INTERNO
       </button>
     </h2>
     <div id="collapse-1" class="accordion-collapse collapse">
       <div class="accordion-body">
+<<<<<<< HEAD
         <div><table class="table checklist table-hover table-sm">
+=======
+        <div ><table class="table checklist table-hover table-sm">
+>>>>>>> 8b544fb (quasi)
           <tbody>
-            {% for ins in inspection[0:13] %}
+            {% for ins in inspection[0:4] %}
             <tr>
+<<<<<<< HEAD
               <td style="text-align:right;">{{ ins[3] }}</td>
               <td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
               <td><label style="white-space: nowrap;"><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td>
               <td><input class="form-control" name="{{ ins[1] }}" type="text" style="visibility:hidden" style="display:none"></td>
+=======
+              <td >{{ ins[3] }}</td>
+               <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
+<td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td><td><input class="form-control" name="{{ ins[1] }}" type="text"  style="display:none"></td>
+>>>>>>> 8b544fb (quasi)
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
+</div>
+<<<<<<< HEAD
+
+{% for i in range(13, 179) %}
+=======
+
+<div class="accordion mb-3" id="accordion-2">
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="heading-2">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-2">
+        🚨 STRUMENTI DI SEGNALAZIONE, COMANDO E SICUREZZA
+      </button>
+    </h2>
+    <div id="collapse-2" class="accordion-collapse collapse">
+      <div class="accordion-body">
+        <div ><table class="table checklist table-hover table-sm">
+          <tbody>
+            {% for ins in inspection[4:8] %}
+            <tr>
+              <td >{{ ins[3] }}</td>
+               <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
+<td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td><td><input class="form-control" name="{{ ins[1] }}" type="text"  style="display:none"></td>
             </tr>
             {% endfor %}
           </tbody>
@@ -745,7 +789,58 @@
   </div>
 </div>
 
-{% for i in range(13, 179) %}
+<div class="accordion mb-3" id="accordion-3">
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="heading-3">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-3">
+        📄 DOCUMENTAZIONE E DOTAZIONE DI BORDO
+      </button>
+    </h2>
+    <div id="collapse-3" class="accordion-collapse collapse">
+      <div class="accordion-body">
+        <div ><table class="table checklist table-hover table-sm">
+          <tbody>
+            {% for ins in inspection[8:18] %}
+            <tr>
+              <td >{{ ins[3] }}</td>
+               <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
+<td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td><td><input class="form-control" name="{{ ins[1] }}" type="text"  style="display:none"></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="accordion mb-3" id="accordion-4">
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="heading-4">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-4">
+        🛠️ VANO MOTORE
+      </button>
+    </h2>
+    <div id="collapse-4" class="accordion-collapse collapse">
+      <div class="accordion-body">
+        <div ><table class="table checklist table-hover table-sm">
+          <tbody>
+            {% for ins in inspection[18:24] %}
+            <tr>
+              <td >{{ ins[3] }}</td>
+               <td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=1> OK</label></td>
+<td><label ><input required class="form-check-input" name="{{ ins[0] }}" type="radio" value=0> Non OK</label></td><td><input class="form-control" name="{{ ins[1] }}" type="text"  style="display:none"></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% for i in range(24, 98) %}
+>>>>>>> 8b544fb (quasi)
     <input type="hidden" name="{{ inspection[i][0] }}" value="1">
 {% endfor %}
 

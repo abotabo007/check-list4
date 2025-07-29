@@ -79,11 +79,6 @@
                   <button name="vehicle" class="btn btn-sm btn-danger" type="submit" value="{{ vehicles[i]["number"] }}">Ispeziona</button>
                 </form>
               </td>
-              <td data-label="Visualizza">
-                <form action="/vehicles" method="get">
-                  <button name="vehicle" class="btn btn-sm btn-danger" type="submit" value="{{ vehicles[i]["number"] }}">Visualizza</button>
-                </form>
-              </td>
             </tr>
             {% endfor %}
           </tbody>
